@@ -1,0 +1,47 @@
+Problem-
+Encode the string in such a manner such that every unique character is followed by its count till the next unique character appears in the string.
+
+Example-
+
+Input: 4 <- Number of test cases
+  aabbc
+  abcd
+  abbdcaas
+  sadasd
+
+Output: 
+  a2b2c1
+  a1b1c1d1
+  a1b2d1c1a2s1
+  s1a1d1a1s1d1
+  
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - (Time - O(n), Space - O(n))
+
+Time complexity is linear as we traversing only once in the string.
+Space complexity is 2*N if every element in the string is different then it will be of 2*size as count of every character will be 1 which will increase length by twice.
+Example - abcd has 4 length but after encoding it will be a1b1c1d1 which is of 8 length.
+
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+	public static String encode(String message) {
+		// Write your code here.
+		StringBuilder str = new StringBuilder();
+
+		for(int i = 0; i < message.length(); i++){
+			char cur = message.charAt(i);
+			int charCount = 1;
+
+			while(i+1 < message.length() && message.charAt(i+1) == cur){
+				charCount++;
+				i++;
+			}
+
+			str.append(cur);
+			str.append(charCount);
+		}
+
+		return str.toString();
+	}
+}
