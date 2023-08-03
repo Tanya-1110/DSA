@@ -1,1 +1,41 @@
+Problem-
+To reverse string of words without changing individual letters of the words. (Only words will be reversed not letters of the words)
+Conditions - Remove the leading and trailing spaces from the string and return the output without these spaces.
+             Remove extra in between spaces in the words of the string.
 
+Examples-
+
+Input: Welcome to Coding Ninjas
+Output: Ninjas Coding to Welcome
+
+Input: Always indent your code
+Output: code your indent Always
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - (Time - O(n), Space - O(1))
+
+import java.util.Scanner;
+
+class Solution {
+
+    static String reverseStringWordWise(String input) {
+        // Write your code here
+
+        String[] str = input.trim().split("\\s+");
+
+        String out = "";
+
+        for(int i = str.length - 1; i >= 0; i--){
+            out += str[i] + " ";
+        }
+
+        return out ;
+    }
+
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        String ans = reverseStringWordWise(input);
+        System.out.println(ans);
+    }
+}
