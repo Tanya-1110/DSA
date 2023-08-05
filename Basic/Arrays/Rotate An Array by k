@@ -9,8 +9,12 @@ Input - 4
 
 Output - 8 5 6 7 
 
+There are 2 approaches to solve. Mentioned below:
 ------------------------------------------------------------------------------------
 Naive Approach - (Time - O(n^2), Space - O(1))
+
+Intution - We rotate the array K times where in each iteration we rotate the array by 1.
+Rotating the array once can be done by changing input[i] to input[i+1] and appending the first character to the end.
 
 import java.util.Scanner;
 
@@ -49,6 +53,8 @@ class Solution {
 --------------------------------------------------------------------------------------------
 
 Optimal Approach - (Time- O(n), Space - O(1))
+
+Intution - Multiple in-place reversals is done. 3 times reversing is done (1st - 0 to k (steps) blocks, 2nd - k + 1 to n - 1 blocks and finally entire array is reversed to obtain rotated array).
 
 import java.util.* ;
 import java.io.*; 
