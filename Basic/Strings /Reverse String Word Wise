@@ -11,8 +11,12 @@ Output: Ninjas Coding to Welcome
 Input: Always   indent your code
 Output: code your indent Always
 
+There is 1 approache to solve. Mentioned below:
 ---------------------------------------------------------------------------------------------------------------------------------------------------
+
 Optimal Approach - (Time - O(n), Space - O(1))
+
+Intution - we create the array of words of the string for the easy traversal in reverse order.
 
 import java.util.Scanner;
 
