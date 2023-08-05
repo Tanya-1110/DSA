@@ -14,7 +14,10 @@ Output:
 0
 1
 2
+
+There is 1 approach to solve. Mentioned below:
 ----------------------------------------------------------------------------------------------------------------------------------------------------
+
 Optimal Approach - (Time - O(n), Space - O(1))
 Here, n is the length of the string.
 
