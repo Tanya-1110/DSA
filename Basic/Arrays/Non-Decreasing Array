@@ -16,10 +16,12 @@ Input: 4
        3 4 2 3
 Output: false
 
+There are 2 approaches to solve. Mentioned below:
 -----------------------------------------------------------------------------------------------------------------
+
 Naive Approach - (Time - O(n^2), Space - O(1))
 
-As we are allowed at most one modification, we can try it on every index separately and naively check whether the array becomes non-decreasing by any modification. For this, we can modify the starting index (i.e. 0) to a very less value (say INT_MIN) and the rest of the indexes as the value of the preceding element if present (i.e. ARR[i] = ARR[i - 1]). 
+Intution - As we are allowed at most one modification, we can try it on every index separately and naively check whether the array becomes non-decreasing by any modification. For this, we can modify the starting index (i.e. 0) to a very less value (say INT_MIN) and the rest of the indexes as the value of the preceding element if present (i.e. ARR[i] = ARR[i - 1]). 
 
 public class Solution {
 	public static boolean isNonDecreasing(int arr[], int n) {
@@ -59,6 +61,8 @@ public class Solution {
 ----------------------------------------------------------------------------------------------------------------
 
 Optimal Approach - (Time - O(n), Space - O(1))
+
+Intution - Best explained in the copy.
 
 import java.util.* ;
 import java.io.*; 
