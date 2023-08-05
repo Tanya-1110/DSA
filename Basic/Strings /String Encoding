@@ -14,9 +14,13 @@ Output:
   a1b1c1d1
   a1b2d1c1a2s1
   s1a1d1a1s1d1
-  
+
+There is 1 approache to solve. Mentioned below:
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Optimal Approach - (Time - O(n), Space - O(n))
+
+Intution - we have created a stringbuilder in which we adding the character and its count as we traverse over the length of the string with the condition that next character matches to the current character and subsequently increasing its count and in ith last appending values in the StringBuilder.
 
 Time complexity is linear as we traversing only once in the string.
 Space complexity is 2*N if every element in the string is different then it will be of 2*size as count of every character will be 1 which will increase length by twice.
