@@ -13,9 +13,12 @@ Output: 7
 Input: 10, 10, 10, 10, 10
 Output: -1
 
+There are 2 approaches to solve. Mentioned below:
 ---------------------------------------------------------------------------------------------------------------
 
 NAIVE APPROACH (Time - O(nlogn), Space - O(1))
+
+Intution - Sort the array and traverse the array from end, iterate over the loop till the values are same and print the non-duplicant second largest value.
 
 import java.util.* ;
 import java.io.*; 
@@ -38,6 +41,7 @@ public class Solution {
 
 OPTIMAL APPROACH (Time - O(n), Space - O(1))
 
+Intution - Maintain 2 variables in 2 domains if the value is larger than largest then shift secondlargest to largest and largest to this value. And if value is between the largest and second largest (value < largest but Value > secondLargest) then set secondLargest to this value but largest should not match with this value. 
 public class Solution {
 	public static int findSecondLargest(int n, int[] arr) {
 
