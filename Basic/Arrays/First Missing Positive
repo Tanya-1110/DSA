@@ -13,11 +13,11 @@ Input: 5
 Output: 5
 
 There are 2 approaches to solve. Mentioned below:
-
 -------------------------------------------------------------------------------------------------------------------------------------------------
+
 Sorting Approach - (Time - O(n*logn), Space - O(1))
 
-Sort the array and ignore the 0 and negative values by continue statement and increase the counter value if value is present at its correct index otherwise for not matching (missed value) return that counter(index).
+Intution - Sort the array and ignore the 0 and negative values by continue statement and increase the counter value if value is present at its correct index otherwise for not matching (missed value) return that counter(index).
 
 import java.util.Arrays;
 
