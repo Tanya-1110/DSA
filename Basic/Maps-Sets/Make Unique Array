@@ -1,0 +1,77 @@
+Problem - 
+For a given array of size n, find the minimum number of element should be removed to make the array unique which has all distinct elements.
+
+Example - 
+
+Input: 4
+4
+1 2 1 2
+5
+1 2 3 1 2
+4
+1 1 1 1
+5
+3 6 7 12 13
+
+Output: 
+2
+2
+3
+0
+-------------------------------------------------------------------------------------------------------------------
+
+Approach - (Time - O(n), Space - O(1))
+
+HASHMAP
+
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class Solution {
+
+	public static int minElementsToRemove(ArrayList<Integer> arr) {
+
+		int n = arr.size();
+
+		HashMap<Integer, Boolean> present = new HashMap<>();
+		int minRemoves = 0;
+
+		for (int i = 0; i < n; i++) {
+
+			// If the current element is present in array.
+			if (present.containsKey(arr.get(i))) {
+				// Increase the number of removes.
+				minRemoves++;
+			} else {
+				// Else recoganize that element is present.
+				present.put(arr.get(i), true);
+			}
+		}
+
+		return minRemoves;
+	}
+}
+-----------------------------------------------------------------------------------------------------------------
+Time - O(n), Space - (1)
+HASHSET 
+
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+
+	public static int minElementsToRemove(ArrayList<Integer> arr) {
+
+		// Write your code here
+
+        int n = arr.size();
+
+		HashSet<Integer> set = new HashSet<>();
+
+		for(int i = 0; i < n; i++){
+			set.add(arr.get(i));
+		}
+
+		return n - set.size();
+	}
+}
