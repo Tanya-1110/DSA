@@ -15,8 +15,12 @@ Input: 4
        1 2 3 4
 Output: -1
 
+There are 2 approaches to solve. Mentioned below:
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Naive Approach - (Time - O(n^2), Space - O(1))
+
+Intution - Calculate left and right sum individually while iterating the array and check whether left is equal to right or not.
 
 int findEquilibriumIndex(vector<int> &arr) {
     int n = arr.size();
@@ -49,6 +53,8 @@ int findEquilibriumIndex(vector<int> &arr) {
 
 Optimal Approach - (Time - O(n), Space - O(1))
 
+Intution - Here we have used total sum of the array as the variable in deciding sum of right elements to the current element.
+
 import java.util.* ;
 import java.io.*; 
 public class Solution {
@@ -64,8 +70,8 @@ public class Solution {
 			 
 			    totSum -= arr[i]; 
 			    if(totSum == sumL)
-					return i;
-				  sumL += arr[i];
+				return i;
+		            sumL += arr[i];
 					
 				} 
 		
