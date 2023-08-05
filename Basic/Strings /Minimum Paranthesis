@@ -1,5 +1,5 @@
 Problem -
-Return the minimum number of parantesis either '(' or ')' to make the given string into the valid string of parantheses where every closing bracket will have an opening bracket.
+Return the minimum number of paranthesis either '(' or ')' to make the given string into the valid string of parantheses where every closing bracket will have an opening bracket.
 
 Example - 
 
@@ -8,8 +8,12 @@ Output: 3
 
 Input: ((
 Output: 2
+
+There is 1 approache to solve. Mentioned below:
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Optimal Approach - (Time - O(n), Space - O(1))
+
+Intution - Explained in copy.
 
 import java.util.* ;
 import java.io.*; 
