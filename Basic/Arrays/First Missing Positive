@@ -12,7 +12,46 @@ Input: 5
        0 1 2 3 4
 Output: 5
 
+There are 2 approaches to solve. Mentioned below:
+
 -------------------------------------------------------------------------------------------------------------------------------------------------
+Sorting Approach - (Time - O(n*logn), Space - O(1))
+
+Sort the array and ignore the 0 and negative values by continue statement and increase the counter value if value is present at its correct index otherwise for not matching (missed value) return that counter(index).
+
+import java.util.Arrays;
+
+public class Solution {
+    public static int firstMissing(int[] arr, int n) {
+        if (n == 0) {
+            return 1;
+        }
+
+        Arrays.sort(arr);
+        int counter = 1;
+
+        for (int i = 0; i < n; i++) {
+            if (arr[i] == counter) {
+                counter++;
+            }
+
+            // Skip the negative number.
+            if (arr[i] < counter) {
+                continue;
+            }
+            // First missing positive number.
+            else {
+                break;
+            }
+        }
+
+        return counter;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - (Time - O(n), Space - O(1))
+
+Intution - Find the correct index for the positive value (0 and -ve are not included) in the array and swap the values. 
 
 import java.util.* ;
 import java.io.*; 
@@ -22,7 +61,7 @@ public class Solution {
 
 		for(int i = 0; i < n; i++){
 			int CI = arr[i] - 1;
-			while(arr[i] > 0 && arr[i] <= n && arr[i] != arr[CI]){
+			while(arr[i] > 0 && arr[i] <= n && arr[i] != arr[CI]){      // this loop will not run more than 2 - 3 times so its complexity is generally not added.
 				int temp = arr[i];
 				arr[i] = arr[CI];
 				arr[CI] = temp;
