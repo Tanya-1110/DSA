@@ -21,6 +21,8 @@ There is 1 approach to solve. Mentioned below:
 Optimal Approach - (Time - O(n), Space - O(1))
 Here, n is the length of the string.
 
+Intution - String can be beautiful either by 010101 or 101010 and we have used to 2 variables x and y to check count of these 2 strings. Best explained in copy.
+
 public class Solution {
     public static int makeBeautiful(String str) {
 
