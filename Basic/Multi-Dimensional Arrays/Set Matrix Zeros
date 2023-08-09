@@ -20,9 +20,13 @@ Output:
 2 0
 0 0
 4 0
+
+There are 3 approaches to solve. Mentioned below.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Naive Approach - (Time - O(n*m*(n+m)), Space - O(n*m))
+
+Intution - Best explained in copy.
 
 import java.io.*;
 import java.util.* ;
@@ -52,6 +56,7 @@ public class Solution {
                           matrix[k][j] = 0;
                     }
 
+                    // for left and right movements
                     for(int u = 0; u < m; u++){
                           matrix[i][u] = 0;
                     }
@@ -62,6 +67,8 @@ public class Solution {
 }
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Better Approach - (Time - O(n*m), Space - O(n + m))
+
+Intution - We have created hashset to reduce space complexity. Explained in copy.
 
 import java.io.*;
 import java.util.* ;
@@ -100,6 +107,8 @@ public class Solution {
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Optimal Approach -(Time - O(n*m), Space - O(1))
 
+Intution - 
+
 class Solution {
     public void setZeroes(int[][] matrix) {
         int n = matrix.length;
@@ -107,6 +116,7 @@ class Solution {
 
         boolean firstCol = false, firstRow = false;
 
+        // If for any particular row, first column becomes zero then as per question entire first Column should be turn to 0.
         for(int i = 0; i < n; i++){
             if(matrix[i][0] == 0){
                 firstCol = true;
@@ -114,6 +124,7 @@ class Solution {
             }
         } 
 
+        // If for any particular column, first roq becomes zero then as per question entire first row should be turn to 0.
         for(int j = 0; j < m; j++){
             if(matrix[0][j] == 0){
                 firstRow = true;
@@ -121,6 +132,9 @@ class Solution {
             }
         } 
 
+        // As by previous iterations we would have decided 0 row and 0 column, so here starting from 1 for both (row and column) till n and m.
+        // If found element is 0, turn corresponding elements's first row and first column to zero.
+        // It is just like informing of any found 0 element in the remaining(except first row and first column) matrix to first row and first column of the matrix.
         for(int i = 1; i < n; i++){
             for(int j = 1; j < m; j++){
                 if(matrix[i][j] == 0){
@@ -129,6 +143,8 @@ class Solution {
             }
         }
 
+        // We are checking for the element of the matrix,if either its first row or first column is zero or not if it is anyhow, then that particular element needs to be 0. So turn that element to 0.
+        // These loop will turn remaining(except first row and first column) matrix to the reuired output. Now just first row and first column are required to turn to 0 entirely if it has even single 0 in it. 
         for(int i = 1; i < n; i++){
             for(int j = 1; j < m; j++){
                 if(matrix[i][0] == 0 || matrix[0][j] == 0){
@@ -136,12 +152,14 @@ class Solution {
                 }
             }
         }
-    
+
+        // If firstColumn is true, then turn entire first column to 0. 
         if(firstCol)
         for(int i = 0; i < n; i++){
             matrix[i][0] = 0;
         }
 
+        // If firstRow is true, then turn entire first row to 0. 
         if(firstRow)
         for(int j = 0; j < m; j++){
             matrix[0][j] = 0;
