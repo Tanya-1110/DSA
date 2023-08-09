@@ -15,16 +15,20 @@ Input: 3 1
 20
 30
 Output: 10 20 30 
+
+There is 1 approach to solve. Mentioned below. 
 -----------------------------------------------------------------------------------------------------------------------------------------------
 
-Approach - (Time - O(n*m), Space - O(1))
+Optimal Approach - (Time - O(n*m), Space - O(1))
+
+Intution - Explained in Copy.
 
 public class Solution {
 
 	public static void spiralPrint(int matrix[][]){
 		//Your code goes here
 
-         // there are no rows then it is an array and there is no spiral traversal for it. So, return.
+         // If there are no rows or no columns, then it is an array and there is no spiral traversal for it. So, return.
                 if(matrix.length==0){
                       return;
                 }
