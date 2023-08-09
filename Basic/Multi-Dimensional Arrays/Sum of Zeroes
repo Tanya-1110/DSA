@@ -13,8 +13,12 @@ Input: 2 3
 0 0 0
 Output: 0
 
+There is 1 approach to sove. Mentioned below.
 ---------------------------------------------------------------------------------------------------------------------------------
 Optimal Approach - (Time - (n*m), Space - O(1))
+
+Intution - This problem solves the basics of moving up-down and left-right in the matrix efficiently. Diagram explained in copy.
+
 
 import java.util.* ;
 import java.io.*; 
