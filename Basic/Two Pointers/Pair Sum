@@ -1,0 +1,83 @@
+Problem - 
+For the given array with distinct integers arranged in ascending order, count all the distinct pairs in the array such that their sum is equal to the 'target'(target is given in the question).
+If there exist no pair, return -1.
+Pair is a combination of 2 elements.
+
+Example -
+
+Input: 5 6
+1 2 3 4 5
+Output: 2
+
+Input: 4 10
+1 3 5 6
+Output: -1
+
+There are 2 approaches to solve. Mentioned Below.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Naive Approach - (Time - O(n^2), Space - O(1))
+
+Intution - In naive approach, we are just adding 2 values by fixing one value through outer loop and changing another value by inner loop. If there sum matches the target 
+           value, then increase the count and finally return it.  
+
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+    public static int pairSum(int arr[], int n, int target) {
+        
+        int c = 0;
+
+        for(int i = 0; i < n; i++){
+            for(int j = i + 1; j < n; j++){
+                if(arr[i] + arr[j] == target)
+                  c++;
+            }
+        }
+        
+        if(c == 0){
+            return -1;
+        }
+
+        return c;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - (Time - O(n), Space - O(1))
+
+Intutuion - We only traverse the array once , by maintaining 2 pointers in which one points to the beginning and other to the end. There are 3 cases to resolve till i < j .
+            Case - 1 : if sum < target [we have to increase the sum in order to match it with target, as array is sorted in ascending order values, increasing i will increase the value of sum as arr[i] < arr[i+1]]
+            Case - 2 : if sum > target [we have to decrease the sum in order to match it with target, as array is sorted in ascending order values, decreasing j will decrease the value of sum as arr[j-1] < arr[j]]
+            Case - 3 : if sum == target [ as both have matched each other just increase the count of the pair and simultaneouly move both i and j to check for other pairs.]
+
+
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+    public static int pairSum(int arr[], int n, int target) {
+        
+        int c = 0, sum = 0;
+        int i = 0;
+        int j = n - 1; 
+
+        while(i < j){
+            sum = arr[i] + arr[j];
+            
+            if(sum < target)
+               i++;
+            else if(sum > target)
+                    j--;
+                else{
+                    c++;
+                    i++;
+                    j--;
+                }      
+        }
+
+        if(c == 0){
+            return -1;
+        }
+
+        return c;
+    }
+}
+
