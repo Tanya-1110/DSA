@@ -1,6 +1,6 @@
 Problem - 
 A number is given in the form of string. Our task is to find pallindrome which is strictly greater than the given number. 
-Note - Given number can be be a pallindrome or may be not so check for both the conditions.
+Note - Given number can be a pallindrome or may be not so check for both the conditions.
 
 Example -
 
@@ -16,118 +16,152 @@ Input: 7
 3298934 <--------- Non-Pallindrome number
 Output: 3299923
 
-There is ___________ approach to solve it. Mentioned below.
+There are 2 approaches to solve it. Mentioned below.
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Approach - (Time - O(), Space - O())
+Naive Approach - (Time - O(n^2), Space - O(1))
 
-Intution -
+Intution - We are just checking if the number is pallindrome or not. If the given number is pallindrome, we are just adding 1 to it to check if next number is pallindrome 
+           or not if it is then return otherwise again add 1 to the number and repeat this till we get the next smallest paalindrome.
 
-import java.util.*;
 import java.io.*;
 
-public class Solution {
-    public static String nextLargestPalindrome(String s, int length) {
-        String temp = s;
-        boolean check = isPalindrome(s, length);
-        if (check == false) {
-            s = makePalindrome(s, length);
-            boolean isBig = biggerThenOriginal(s, temp, length);
-            if (isBig == true) {
-                return s;
-            }
-        }
-        
-        boolean allnine = true;
-        for (int i = 0; i < length; i++) {
-            if (s.charAt(i) != '9') {
-                allnine = false;
-                break;
-            }
-        }
-        
-        String ans = "";
-        if (allnine) {
-            for (int i = 0; i < length - 1; i++) {
-                ans += '0';
-            }
-            ans = '1' + ans + '1';
-            return ans;
-        } else if (length % 2 == 0) {
-            int i = length / 2 - 1;
-            int j = length / 2;
-            s = helperForEvenLength(s, i, j);
-            return s;
-        } else {
-            int mid = length / 2;
-            int i = mid - 1;
-            int j = mid + 1;
-            if (s.charAt(mid) != '9') {
-                s = s.substring(0, mid) + ((char) (s.charAt(mid) + 1)) + s.substring(mid + 1);
-                return s;
-            } else {
-                s = s.substring(0, mid) + '0' + s.substring(mid + 1);
-                s = helperForEvenLength(s, i, j);
-                return s;
-            }
-        }
-    }
+class GFG
+{
+	static int isPalindrome(int num)
+	{
+		int n, k, rev = 0;
+		n = num;
 
+		while (num != 0) {
+			k = num % 10;
+			rev = (rev * 10) + k;
+			num = num / 10;
+		}
 
-    public static String helperForEvenLength(String s, int i, int j) {
-        while (i >= 0 && j < s.length()) {
-            if (s.charAt(i) != '9' && s.charAt(j) != '9') {
-                char c = (char) (s.charAt(i) + 1);
-                s = s.substring(0, i) + c + s.substring(i + 1);
-                s = s.substring(0, j) + c + s.substring(j + 1);
-                break;
-            } else {
-                s = s.substring(0, i) + '0' + s.substring(i + 1);
-                s = s.substring(0, j) + '0' + s.substring(j + 1);
-                i--;
-                j++;
-            }
-        }
-        return s;
-    }
+		if (n == rev) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
 
-    public static boolean isPalindrome(String s, int l) {
-        int i = 0;
-        int j = l - 1;
-        while (i < j) {
-            if (s.charAt(i) != s.charAt(j)) {
-                return false;
-            }
-            i++;
-            j--;
-        }
-        return true;
-    }
-
-    public static String makePalindrome(String s, int l) {
-        StringBuilder sb = new StringBuilder(s);
-        int i = 0;
-        int j = l - 1;
-        while (i < j) {
-            sb.setCharAt(j, s.charAt(i));
-            i++;
-            j--;
-        }
-        return sb.toString();
-    }
-
-    public static boolean biggerThenOriginal(String s, String temp, int length) {
-    for (int i = 0; i < length; i++) {
-        if (s.charAt(i) < temp.charAt(i)) {
-            return false;
-        } else if (s.charAt(i) > temp.charAt(i)) {
-            return true;
-        }
-    }
-    // If all digits are equal, return true (s is equal to or bigger than temp)
-    return true;
+	public static void main(String[] args)
+	{
+		int num = 9687;
+	
+		// If number is not Palindrome we go to the next
+		// number using while loop
+		while (isPalindrome(num) == 0) {
+			num = num + 1;
+		}
+		System.out.print("Next Palindrome :");
+		System.out.print(num);
+	}
 }
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - (Time - O(n), Space - O(1))
 
+Intution - Best Explained in copy.
+
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+	public static String nextLargestPalindrome(String number, int n) {
+		// Write your code here.
+		StringBuilder sb = new StringBuilder();
+		
+		if(isAll9(number, n)){
+			
+			sb.append('1');
+			for(int i=0; i<n-1; i++) 
+			    sb.append('0');
+			sb.append('1');
+			
+			return sb.toString();
+		}else{
+			return mainfun(number, n);	
+		}
+	}
+	
+	public static boolean isAll9(String number, int n){
+		
+		for(int i = 0; i < n; i++){
+			if(number.charAt(i)!='9') 
+			   return false;
+		}
+		
+		return true;
+	}
+	
+	public static int[] getArray(String number, int n){
+		
+		int[] arr = new int[n];
+		
+		for(int i = 0; i < n; i++){
+			arr[i] = number.charAt(i) - '0';
+		}
+		
+		return arr;
+	}
+	
+	public static String mainfun(String number, int n){
+		
+		int mid = n / 2;
+		int i = mid - 1;
+		int j = (n % 2 == 0) ? mid : mid + 1;
+		
+		boolean leftsmaller = false;
+		int[] nums = getArray(number, n);
+		
+		// Step 1 - we will ignore all the digits if they are same on both left and right side.
+		while(i >= 0 && nums[i] == nums[j]){
+			i--; j++;
+		}
+
+		// [Case-1(i < 0) and Case-2.2(left digit < right digit)]
+		if(i < 0 || nums[i] < nums[j]) 
+		    leftsmaller = true;
+		
+		// Copy mirror of left to right [Case - 2.1]
+		while(i>=0){
+			nums[j++] = nums[i--];
+		}
+		
+		// [Case-1 and Case-2.2]
+		if(leftsmaller){
+			int carry = 1;
+			
+			//odd length (we have to care of middle element in odd length but in even length mid and j both are same so,mid can be handled easily)
+			if(n % 2 == 1){ 
+	
+				nums[mid] += 1;
+				carry = nums[mid] / 10;
+				nums[mid] %= 10;
+			}
+			
+			// work for both odd and even length
+			i = mid - 1;
+			j = (n % 2 == 0) ? mid : mid + 1;
+			
+			while(i >= 0 && carry > 0){
+				nums[i] = nums[i] + carry;
+				carry = nums[i] / 10;
+				nums[i] %= 10;
+				nums[j] = nums[i];
+				i--;
+				j++;
+			}
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		
+		for(int p=0; p<n; p++)
+			sb.append(nums[p]);
+			
+		return sb.toString();
+	}
 }
 
 
