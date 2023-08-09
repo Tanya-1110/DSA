@@ -107,7 +107,7 @@ public class Solution {
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Optimal Approach -(Time - O(n*m), Space - O(1))
 
-Intution - 
+Intution - Explained in copy.
 
 class Solution {
     public void setZeroes(int[][] matrix) {
