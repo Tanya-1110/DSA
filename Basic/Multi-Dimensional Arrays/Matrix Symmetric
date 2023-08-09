@@ -1,5 +1,5 @@
 Problem - 
-Check whether the given matrix is symmetric or not. Symmetrix matrix is the matrix whose transpose is equal to the matrix itself.
+Check whether the given square matrix is symmetric or not. Symmetrix matrix is the matrix whose transpose is equal to the matrix itself.
 
 Example-
 
@@ -11,8 +11,11 @@ Input: 3
 1 2 3 1 4 5 3 5 8
 Output: False
 
+There is 1 approach to solve. Mentioned below.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 Optimal Approach - (Time - O(n^2), Space - O(1))
+
+Intution - Diagram in the copy.
 
 import java.util.* ;
 import java.io.*; 
