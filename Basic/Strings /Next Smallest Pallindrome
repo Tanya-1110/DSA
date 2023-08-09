@@ -21,8 +21,7 @@ There are 2 approaches to solve it. Mentioned below.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Naive Approach - (Time - O(n^2), Space - O(1))
 
-Intution - We are just checking if the number is pallindrome or not. If the given number is pallindrome, we are just adding 1 to it to check if next number is pallindrome 
-           or not if it is then return otherwise again add 1 to the number and repeat this till we get the next smallest paalindrome.
+Intution - If the given number is not pallindrome, we are adding 1 to the number and will check it again for pallindromcity till it becomes a pallindromic number.  
 
 import java.io.*;
 
