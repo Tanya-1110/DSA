@@ -1,0 +1,59 @@
+Problem -
+For the given array, move the negative elements to the beginning of the array and positive elements to the end of the array.
+
+Example -
+Input: 5
+1 -4 -2 5 3
+Output: -2 -4 1 5 3
+
+Input: 2
+2 1   
+Output: 2 1
+
+There are 2 approaches to solve it. Mentioned below.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Naive Approach - (Time - O(nlogn), Space - O(1))
+
+Intution - Sort the array as it will arrange the elements in the ascending order like the number line (positive integer will come after negative ones).
+
+import java.util.Arrays;
+public class Solution {
+    public static int[] separateNegativeAndPositive(int []nums) {
+
+        // Sort the given array in ascending order.
+        Arrays.sort(nums);
+        return nums;
+    }
+}
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - (Time - O(n), Space - O(1))
+
+Intution - Check if the start element is positive and last element is negative if it is so, just swap the integers otherwise just increases the pointer 
+             - if start has negative element, there is no need to swap as it is at its correct position already, So ignore this element by moving pointer ahead (i++).
+             - if end has positive element, it is correctly placed so just decrement end pointer to move it to new postion.
+
+
+import java.util.*;
+public class Solution {
+    public static int[] separateNegativeAndPositive(int a[]) {
+        int i = 0; 
+        int j = a.length - 1;
+
+        while(i < j){
+            if(a[i] >= 0 && a[j] < 0){
+                int temp = a[i];
+                a[i] = a[j];
+                a[j] = temp;
+                i++;
+                j--;
+            }else if(a[i] < 0)
+                    i++;
+                else if(a[j] >= 0)
+                        j--;
+
+        }
+        return a;
+    }
+}
