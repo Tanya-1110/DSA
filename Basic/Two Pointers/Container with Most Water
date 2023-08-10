@@ -1,0 +1,78 @@
+Problem -
+An array is given of size n in which every element represents the height of the container. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+Find two lines that together with the x-axis form a container, such that the container contains the most water.
+Return the maximum amount of water a container can store.
+Notice that you may not slant the container that is the water is at straight level between two vertical lines.
+Refer figure in the copy.
+
+Example -
+Input: 5
+4 3 2 1 4
+Output: 16
+
+Input: 3
+1 2 1
+Output: 2
+
+There are 2 approaches to solve. Mentioned below.
+----------------------------------------------------------------------------------------------------------------------------------------------
+Naive Approach - (Time - O(n^2), Space - O(1))
+
+Intution - This aproach just traverse the loop from the start with inner loop that traverses from end till that index to calculate maximum area.
+
+public class Solution {
+
+	public static int maxArea(int[] height) {
+		// Number of elements.
+		int n = height.length;
+
+		// Variable to store max area initialised as a negative vlaue.
+		int globalMax = -1;
+
+		// Loop through all starting indices.
+		for (int i = 0; i < n; i++) {
+
+			// Fix a ending index for each starting index.
+			for (int j = n - 1; j > i; j--) {
+
+				// Calculate area.
+				int area = (j - i) * Math.min(height[i], height[j]);
+
+				// Compare it with overall best area.
+				globalMax = Math.max(globalMax, area);
+			}
+		}
+		return globalMax;
+	}
+}
+---------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - (Time - O(n), SPace - O(1))
+
+Intution - Best eplained in copy with diagram.
+
+public class Solution {
+
+	public static int maxArea(int[] height) {
+
+    int i = 0;
+		int j = height.length - 1;
+		int maxArea = 0;
+
+		while(i < j){
+			int p = height[i];
+			int q = height[j];
+
+			int temp = (j - i) * Math.min(p,q);
+			if(temp > maxArea)
+			    maxArea = temp;
+
+			if(p > q)
+			   j--;
+			else
+			   i++;   	
+		}
+
+		return maxArea;
+
+	}
+}
