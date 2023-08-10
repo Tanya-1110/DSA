@@ -1,1 +1,36 @@
+Problem -
+You have to sort the given array in ascending order. Perform inplace sort.
 
+Example -
+Input: 5
+5 3 7 2 1
+Output: 1 2 3 5 7
+
+There is 1 approach to solve. Mentioned below.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - (Time - O(n^2), Space - O(1))
+
+Intution - Outer for-loop is running for the elements of the array. Inner while loop is running to find the correct position for the 'temp' or current element (By the time it finds 
+           correct position for temp, it just shifts bigger element before current element to just next index and the time it founds that the previous element to current is 
+           smallest it stops the while loop and put current element to j + 1 index(as index is shifted to 1 more previous element during while condition checking we have to 
+           update j to post this current element.
+
+import java.util.* ;
+import java.io.*; 
+
+public class Solution {
+
+	public static void insertionSort(int n , int[] arr) {
+		
+		for(int i = 1; i < n; i++){
+			int temp = arr[i];
+      int j = i - 1; 
+
+			while(j >= 0 && temp < arr[j]){
+				arr[j+1] = arr[j];
+				j--;
+			}
+			arr[j+1] = temp;
+		}
+	}
+}
