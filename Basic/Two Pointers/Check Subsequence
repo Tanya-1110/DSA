@@ -1,1 +1,91 @@
+Problem -
+You have been given 2 strings. Your task is to check whether string 1 is the subsquence of string 2 or not. (String length of string 1 is less than or equal to string 2).
 
+Subsequence of a string is a new string that can be derived from the original string by deleting some characters(can be none) without changing the relative ordering of other characters.
+
+Example - 
+Input: AE
+BADE
+Output: True
+
+Input: AB
+AC
+Output: False
+
+Input: CB
+BCDE
+Output: False
+
+Input: ABC
+AHBDGC
+Output: True
+
+There are 2 approaches to solve. Mentioned below.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Naive Approach - (Time - O(n*m), Space - O(1))
+n and m are the length of both of the strings.
+
+Intution -  Traverse over the length of subsequence if at any stage both characters are matched just increase the cout variable(it denotes the characters of subsequence) 
+            if at the end count matches to the length of the subsequence string, it means that subsequence is the part of the original string so, return true. 
+
+public class Solution {
+
+	public static String isSubsequence(String str1, String str2) {
+		int prev = -1;
+		int count = 0;
+		int n = str1.length();
+		int m = str2.length();
+		for (int i = 0; i < n; i++) {
+
+			// To use iterate all character of 'str2'.
+			for (int j = 0; j < m; j++) {
+				
+				if (str1.charAt(i) == str2.charAt(j) && j > prev) {
+					prev = j;
+					count += 1;
+					break;
+				}
+			}
+		}
+
+		// If all characters of 'str1' are present in 'str2' in same order.
+		if (count == n) {
+			return "True";
+		} else {
+			return "False";
+		}
+	}
+
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Optimal Approach - (Time - O(m), Space - O(1))
+m is the length of the original string.
+
+Intution -  We are iterating over the length of the original string if str1 has matching character with str2, then just shift to next position in subsequence(str1) as str2 has its incremenet in position through outer loop.
+            If any point j == n that means subsequence has reached its end of length and has matched all the characters with original string so return true. 
+            If j doesn't become to n but i has completed its loop that simply means rest of the characters of str1 has no match in original string so return false.
+
+import java.util.*;
+import java.io.*;
+
+public class Solution {
+
+    public static String isSubsequence(String str1, String str2) {
+
+        int j = 0, n = str1.length();
+
+        for (int i = 0; i < str2.length(); i++) {
+
+            if (str2.charAt(i) == str1.charAt(j)) j++;
+
+            if (j == n) return "True";
+
+        }
+
+        return "False";
+
+    }
+}
