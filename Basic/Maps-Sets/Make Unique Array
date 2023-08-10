@@ -18,12 +18,16 @@ Output:
 2
 3
 0
+
+There are 2 approaches(Both with same time and space complexity). Mentioned below.
 -------------------------------------------------------------------------------------------------------------------
 
-Approach - (Time - O(n), Space - O(1))
+Approach - (Time - O(n), Space - O(n))
 
 HASHMAP
 
+Intution - We have created a hashmap, which stores the element if it is found for the first time and updates key with 1 value but if the element already exists then increase
+           the count that represents the elements to be removed to make the array unique.
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +38,7 @@ public class Solution {
 
 		int n = arr.size();
 
-		HashMap<Integer, Boolean> present = new HashMap<>();
+		HashMap<Integer, Integer> present = new HashMap<>();
 		int minRemoves = 0;
 
 		for (int i = 0; i < n; i++) {
@@ -45,7 +49,7 @@ public class Solution {
 				minRemoves++;
 			} else {
 				// Else recoganize that element is present.
-				present.put(arr.get(i), true);
+				present.put(arr.get(i), 1);
 			}
 		}
 
@@ -53,16 +57,17 @@ public class Solution {
 	}
 }
 -----------------------------------------------------------------------------------------------------------------
-Time - O(n), Space - (1)
+Time - O(n), Space - (n)
+In worst case, all elements will be distinct, so hashset will be filled completely.
 HASHSET 
+
+Intution - Hashset is used as it only stores unique elements. We have created HashSet of size of the array, so after filling unique elements, left over space in hashset is the answer.
 
 import java.util.* ;
 import java.io.*; 
 public class Solution {
 
 	public static int minElementsToRemove(ArrayList<Integer> arr) {
-
-		// Write your code here
 
         int n = arr.size();
 
