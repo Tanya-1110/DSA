@@ -1,1 +1,33 @@
+Problem -
+You have to sort the given array in ascending order. Perform inplace sort.
 
+Example -
+Input: 5
+5 3 7 2 1
+Output: 1 2 3 5 7
+
+There is 1 approach to solve. Mentioned below.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - (Time - O(n^2), Space - O(1))
+
+Intution - Idea is to find the minimum element in the array by consecutively checking adjacent elements. Swap the minimum element found in the entire array with the current position element. This way sorts the array.
+
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+	public static void selectionSort(int arr[], int n) {
+		
+		for(int i = 0; i < n - 1; i++){
+			int pos = i;
+			for(int j = i+1; j < n; j++){
+				if(arr[j] < arr[pos]){
+					pos = j;
+				}
+			}
+
+			int temp = arr[i];
+			arr[i] = arr[pos];
+			arr[pos] = temp;
+		}
+	}
+}
