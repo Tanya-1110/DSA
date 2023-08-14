@@ -13,6 +13,7 @@ Output: true
 Input: hearts earth
 Output: false
 
+There are 2 approaches to solve. Mentioned below.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 Sorting Approach (naive approach)  - (Time - O(nlogn), Space - O(1))
 
