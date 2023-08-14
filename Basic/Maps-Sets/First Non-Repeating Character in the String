@@ -1,0 +1,111 @@
+Problem - 
+You are provided with the string and your task is to return the first unique character in the string.
+The string will contain characters i.e., ('A' - 'Z') and ('a' - 'z').
+If there is no non-repeating character, print first character of the string.
+
+Example - 
+Input: aDcadhc
+Output: D
+
+Input: AAAbcdb
+Output: c
+
+There are 2 approaches to solve. Mentioned below.
+-------------------------------------------------------------------------------------------------------------------
+Naive Approach - (Time - O(n^2), Space - O(1))
+
+Intution - Explained in copy.
+
+public class Solution {
+	public static char firstNonRepeatingCharacter(String str) {
+		int f = 0;
+		// Loop to calculate frequency of each character
+		for (int i = 0; i < str.length(); i++) {
+
+			// Flag to keep check of repeatating characters
+			f = 0;
+			// Loop to check for repeated characters
+			for (int j = 0; j < str.length(); j++) {
+
+				if (str.charAt(i) == str.charAt(j) && i != j) {
+					f = 1;
+					break;
+				}
+
+			}
+
+			if (f == 0) {
+				return str.charAt(i);
+			}
+		}
+		// If all repeated then return first character
+		return str.charAt(0);
+
+	}
+}
+--------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - (Time - O(n), Space - O(n))
+
+Intution - 
+
+import java.util.HashMap;
+
+public class Solution {
+
+	public static char firstNonRepeatingCharacter(String str) {
+
+		// Map to store frequency of each character
+		HashMap < Character, Integer > freqOfCharacters = new HashMap< Character, Integer > ();
+
+		// Loop to calculate frequency of each character
+		for (int i = 0; i < str.length(); i++) {
+			char ch = str.charAt(i);
+
+			int number = freqOfCharacters.getOrDefault(ch, 0);
+			freqOfCharacters.put(ch, number + 1);
+
+		}
+
+		// Loop to return the first non-repeating character
+		for (int i = 0; i < str.length(); i++) {
+			char ch = str.charAt(i);
+			if (freqOfCharacters.get(ch).intValue() == 1) {
+				return ch;
+			}
+		}
+		// Return first character of string if all are repeating characters
+		return str.charAt(0);
+
+	}
+}
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Linked HashMap is same as Hashmap only.
+
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+
+	public static char firstNonRepeatingCharacter(String str) {
+
+        char[] arr = str.toCharArray();
+
+		LinkedHashMap<Character, Integer> map = new LinkedHashMap<>();
+
+		for(int i = 0; i < arr.length; i++){
+			if(map.containsKey(arr[i])){
+                map.put(arr[i], map.get(arr[i]) + 1);
+			}else{
+				map.put(arr[i], 0);
+			}
+		}
+    
+	    for(Map.Entry<Character, Integer> m : map.entrySet()){
+			if(m.getValue() == 0){
+			   return m.getKey();
+		    }
+		}
+		return str.charAt(0);
+	}
+}
