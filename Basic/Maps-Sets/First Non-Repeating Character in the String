@@ -46,7 +46,7 @@ public class Solution {
 --------------------------------------------------------------------------------------------------------------------------------------
 Optimal Approach - (Time - O(n), Space - O(n))
 
-Intution - 
+Intution - Explained in copy.
 
 import java.util.HashMap;
 
