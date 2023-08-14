@@ -1,0 +1,87 @@
+Problem -
+You are given 2 strings, you have to return true if both are eual and false if they are not equal.
+
+Two strings are said to be anagram, if they contain same characters irrespective of their order of occurences in both of the string.
+
+Example -
+Input: listen silent
+Output: true
+
+Input: triangle integral
+Output: true
+
+Input: hearts earth
+Output: false
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Sorting Approach (naive approach)  - (Time - O(nlogn), Space - O(1))
+
+Intution - Sort the 2 char arrays and check if they are anagrams by using Arrays.equals function which compares array elements by traversal so it takes o(n) time complexity and sorting takes O(logn) time complexity totals upto (nlogn).
+
+import java.util.Arrays;
+
+public class Solution {
+	public static boolean areAnagram(String str1, String str2) {
+
+		int n1 = str1.length();
+		int n2 = str2.length();
+
+		if (n1 != n2) {
+			return false;
+		}
+
+		// Convert input string to char array.
+		char[] arr1 = str1.toCharArray();
+		char[] arr = str2.toCharArray();
+
+		
+		Arrays.sort(arr1);
+		Arrays.sort(arr2);
+
+		// Compare sorted strings. 
+// or use return Arrays.equals(arr1, arr2); instead of this for loop it directly returns true or false to the answer.
+		for (int i = 0; i < n1; i++) {
+			if (arr1[i] != arr2[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+}
+--------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - (Time - O(n), Space - O(n))
+
+  Intution - Explained in copy. Values() function can have any kind of integer value even negative depicting 1 string has got same characters as that of other string string but at higher frequency like "ccaa" and "ccac". Pls better explain this example in copy.
+
+  class Solution {
+    public boolean isAnagram(String s, String t) {
+        Map<Character, Integer> count = new HashMap<>();
+        
+        // Count the frequency of characters in string s
+        for (char x : s.toCharArray()) {
+            count.put(x, count.getOrDefault(x, 0) + 1);
+        }
+        
+        // Decrement the frequency of characters in string t
+        for (char x : t.toCharArray()) {
+            count.put(x, count.getOrDefault(x, 0) - 1);
+        }
+        
+        // Check if any character has non-zero frequency
+        for (int val : count.values()) {
+            if (val != 0) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+}
+  
+  
+  
+  
+
+
+
+  
