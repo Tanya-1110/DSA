@@ -1,0 +1,98 @@
+Problem -
+You are given two arrays 'A' and 'B' of size 'N' and 'M' respectively. Both these arrays are sorted in non-decreasing order. You have to find the intersection of these two arrays.
+Intersection of two arrays is an array that consists of all the common elements occurring in both arrays.
+Note : Both the arrays are sorted in nondecreasing order. The output should be in the order of elements that occur in the original arrays. If there is no intersection present then
+       return an empty array.
+
+Example -
+Input: 6 4
+1 2 2 2 3 4
+2 2 3 3
+Output: 2 2 3 3 
+
+Input: 1 1
+3
+6
+Output: -1
+
+There are 2 approaches to solve. Mentioned below.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Naive Approach - (Time - O(n+m), Space - O(n))
+
+space is O(n) bcz of use of hashmap.
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class Solution
+{
+    public static ArrayList<Integer> findArrayIntersection(ArrayList<Integer> arr1, int n, ArrayList<Integer> arr2, int m)
+    {
+        // Declare an array to store answer.
+        ArrayList<Integer> ans = new ArrayList<Integer>();
+
+        HashMap<Integer, Integer> mp = new HashMap<>();
+
+        // Hashing the elements of the first array
+        for (int i = 0; i < n; i++)
+        {
+            if (mp.containsKey(arr1.get(i)))
+            {
+                mp.put(arr1.get(i), 1 + mp.get(arr1.get(i)));
+            }
+            else
+            {
+                mp.put(arr1.get(i), 1);
+            }
+        }
+
+        for (int j = 0; j < m; j++)
+        {
+            // Checking if the elements are present in the second array or not.
+            if (mp.containsKey(arr2.get(j)))
+            {
+                ans.add(arr2.get(j));
+                mp.put(arr2.get(j), mp.get(arr2.get(j)) - 1);
+
+                // Deleting the element if it's frequency is 0.
+                if (mp.get(arr2.get(j)) == 0)
+                {
+                    mp.remove(arr2.get(j));
+                }
+            }
+        }
+
+        return ans;
+    }
+}
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - (Time - O(min(n,m)), Space - O(min(n,m)))
+
+Intution - we have used 2 pointers as both the arrays are sorted.
+
+import java.util.* ;
+import java.io.*; 
+public class Solution
+{
+	public static ArrayList<Integer> findArrayIntersection(ArrayList<Integer> arr1, int n, ArrayList<Integer> arr2, int m)
+	{
+		ArrayList<Integer> list = new ArrayList<>();
+		int i = 0, j = 0;
+	     while(i < n && j < m){
+			 if(arr1.get(i) < arr2.get(j))
+			    i++;
+			 else if(arr1.get(i) > arr2.get(j))
+			     	j++;
+				  else{
+						list.add(arr1.get(i));
+						i++;
+						j++;
+				    }  
+		 }
+		
+		 return list;  
+	}
+}
+
