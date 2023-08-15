@@ -1,0 +1,230 @@
+Problem - 
+You are given an array/list of integers of length of N. Find all the elements that occur strictly more than floor(N/3) times in the given array/list.
+Note : value must be greater than floor(N/3) i.e., if floor(N/3) has 3 value then repeated elements must have its occurrence more than 3 i.e., it can have repititon 
+       4 times or more than it.
+
+Example - 
+Input: 7
+3 2 2 1 5 2 3
+Output: 2
+
+Input: 5
+7 4 4 9 7
+Output: 4 7
+
+There are 4 approaches to solve. Mentioned below.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Brute Force Approach - (Time - O(n^2), Space - O(1))
+
+Intution - The idea is to count the number of times each element occurs and if any element occurs more than N/3 times, then include it in our answer.
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Solution 
+{
+    public static ArrayList<Integer> majorityElementII(ArrayList<Integer> arr) 
+    {
+
+        int n=arr.size();
+
+        // Array for storing final answer.
+        ArrayList<Integer> majorityElement=new ArrayList<Integer>();
+
+        // Iterate through the array.
+        for (int i = 0; i < n; i++) 
+        {   
+            // Variable for storing the frequency of the current element.
+            int count = 0;
+            
+            // Iterate through the array to find the frequency of the current element.
+            for(int j=0; j < n; j++)
+            {
+                // Increment count if we find a element with value equal to current element.
+                if((int)arr.get(i) == (int)arr.get(j)){
+                    count += 1;
+                }
+                
+            }
+            // Store the current element if its frequency is more than n/3 and if it is not already stored.
+	    if (count > n / 3 && (majorityElement.size() == 0 || (majorityElement.size() != 2 && (int)majorityElement.get(majorityElement.size() - 1) != (int)arr.get(i))))
+            {
+                majorityElement.add(arr.get(i));
+            }
+        }
+
+        // Return all the stored majority elements.
+        return majorityElement;
+
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+HashMap Approach - (Time - O(n), Space - O(n))
+
+Intution - The idea is to store the frequency of each element from the given array/list into the HashMap and then include all the elements with frequencies greater than
+           N/3 in the answer.
+
+import java.io.*;
+import java.util.* ;
+
+import java.util.ArrayList;
+
+public class Solution 
+{
+    public static ArrayList<Integer> majorityElementII(ArrayList<Integer> arr) 
+    {
+        int n = arr.size();       
+        int maj = (int)Math.floor(n/3);
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for(int i = 0; i < arr.size(); i++){
+            map.put(arr.get(i), map.getOrDefault(arr.get(i), 0) + 1);
+        }
+
+        ArrayList<Integer> list = new ArrayList<>();
+
+        for(int i : map.keySet()){
+            if(map.get(i) > maj){
+                list.add(i);
+            }
+        }
+
+        return list;
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sorting Approach - (Time - O(nlogn), Space - O(logn))
+
+Intution - The idea is to sort the array and then count the number of occurrences of each element in a single traversal.
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Solution 
+{
+    public static ArrayList<Integer> majorityElementII(ArrayList<Integer> arr) 
+    {
+        int n=arr.size();int sum=0;
+
+        // Sort the given array in non-decreasing order.
+        Collections.sort(arr);
+
+        // Array for storing final answer.
+        ArrayList<Integer> majorityElement=new ArrayList<Integer>();
+
+        // Iterate through the array.
+        for (int i = 0; i < n; i++) 
+        {
+            for(int j=0;j<3;j++)
+            {
+                sum=(sum+arr.get(0))%10;
+            }
+            // Variable for storing the frequency of the current element.
+            int count = 1, x=arr.get(i);
+
+            // Iterate while the next element is equal to the current element.
+            while (i + 1 < n &&  arr.get(i + 1) == x) 
+            {
+                i = i + 1;
+                count = count + 1;
+            }
+
+            // Include the current element in the answer if count is greater than n/3.
+            if (count > n / 3) 
+            {
+                majorityElement.add(arr.get(i));
+            }
+        }
+
+        // Return all the stored majority elements.
+        return majorityElement;
+
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Moore's Voting Algorithm Approach - (Time - O(n), Space - O(1))
+
+Intution - The idea is to use a modification of Moore's voting algorithm to find candidate elements that may occur more than N/3 times in the given array. We will use the 
+           fact that if we remove 3 distinct elements from the array, the elements which occurred more than N/3 times do not change.
+Note: We can prove using the pigeonhole principle that there are at most 2 elements possible that can occur more than N/3 times, we will use the variable ‘FIRST_CANDIDATE’ 
+      to store the first element that can possibly occur more than ‘N’/3 times and another variable ‘SECOND_CANDIDATE’ to store the second element that can possibly occur 
+      more than N/3 times. Also, we will use the variables ‘FIRST_COUNT’ and ‘SECOND_COUNT’, both of which will be initialized to 0, to store the frequency of the 
+      ‘FIRST_CANDIDATE’ and ‘SECOND_COUNT’ respectively.
+
+
+import java.util.ArrayList;
+
+public class Solution {
+    public static ArrayList<Integer> majorityElementII(ArrayList<Integer> arr) {
+        int n = arr.size();
+
+        // Array for storing final answer.
+        ArrayList<Integer> majorityElement=new ArrayList<Integer> ();
+
+        // Variables for storing the elements which may occur more than n/3 times.
+        int firstCandidate = 0, secondCandidate = 0;
+
+        // Variables for storing the frequency of the candidate elements.
+        int firstCount = 0, secondCount = 0;
+
+        // Iterate through the array.
+        for (int i = 0; i < n; i++) {
+            // Increment firstCount if the current element is equal to firstCandidate.
+            if (arr.get(i) == firstCandidate) {
+                firstCount = firstCount + 1;
+            }
+
+            // Increment secondCount if the current element is equal to secondCandidate.
+            else if (arr.get(i) == secondCandidate) {
+                secondCount = secondCount + 1;
+            }
+            // Change value of the firstCandidate to the current element if firstCount is equal to 0.
+            else if (firstCount == 0) {
+                firstCandidate = arr.get(i);
+                firstCount = 1;
+            }
+
+            // Change value of the secondCandidate to the current element if secondCount is equal to 0.
+            else if (secondCount == 0) {
+                secondCandidate = arr.get(i);
+                secondCount = 1;
+            }
+
+            // Otherwise decrement firstCount and secondCount by 1.
+            else {
+                firstCount = firstCount - 1;
+                secondCount = secondCount - 1;
+            }
+        }
+
+        firstCount = 0;
+        secondCount = 0;
+
+        // Iterate through the array to find frequency of firstCandidate and secondCandidate.
+        for (int i = 0; i < n; i++) {
+            // Increment firstCount if the current element is equal to firstCandidate.
+            if (arr.get(i) == firstCandidate) {
+                firstCount = firstCount + 1;
+            }
+
+            // Increment secondCount if the current element is equal to secondCandidate.
+            else if (arr.get(i) == secondCandidate) {
+                secondCount = secondCount + 1;
+            }
+        }
+
+        // Include firstCandidate in the answer if its frequency is more than n/3.
+        if (firstCount > n / 3) {
+            majorityElement.add(firstCandidate);
+        }
+
+        // Include secondCandidate in the answer if its frequency is more than n/3.
+        if (secondCount > n / 3) {
+            majorityElement.add(secondCandidate);
+        }
+
+        // Return all stored majority elements.
+        return majorityElement;
+    }
+}
