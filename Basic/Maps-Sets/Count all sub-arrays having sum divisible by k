@@ -1,0 +1,15 @@
+Problem -
+You are given an arr and an integer 'k', your task is to find the count of all sub-arrays whose sum is divisble by integer 'k'.
+Note - If there is no such subarray whose sum is divisble by 'k' then simply return '0'.
+
+Example -
+Input: 3 2
+2 3 1
+Output: 3
+
+Input: 4 1
+1 2 3 4
+Output: 10
+
+There are  approaches to solve. Mentioned below.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
