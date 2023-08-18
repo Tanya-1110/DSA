@@ -11,5 +11,72 @@ Input: 4 1
 1 2 3 4
 Output: 10
 
-There are  approaches to solve. Mentioned below.
+There are 2 approaches to solve. Mentioned below.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Brute Force - (Time - O(n^2), Space - O(1)) 
+
+This approach has shown TLE(Time Limit Exceeded).
+Intution - The basic idea is that try each and every possible subarray and find the sum of the current subarray and check if the current sum is divisible by ‘K’. 
+
+import java.util.ArrayList;
+
+public class Solution {
+
+  public static int subArrayCount(ArrayList < Integer > arr, int k) {
+
+  	// To store count of the all subarray has sum is divisible by 'k'.
+    int count = 0; 
+
+    for (int i = 0; i < arr.size(); i++) {
+    	
+      // To store sum of subarray, starting indices are 'i'.
+      int curSum = 0; 
+
+      // Check all subarray that can have sum divisible by 'k'.
+      for (int j = i; j < arr.size(); j++) {
+        curSum = curSum + arr.get(j);
+        if (curSum % k == 0) {
+          count += 1;
+        }
+      }
+    }
+
+    return count;
+  }
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Hashing (Optimal Approach) - (Time - O(n), Space - O(k))
+
+It is taking O(k) space as hashmap stores the remainders and for k integer, there can only 0 to k-1 remainders possible. 
+
+Intution - Explained in copy.
+
+class Solution {
+    public int subarraysDivByK(int[] nums, int k) {
+
+        int ans = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        int sum = 0, rem = 0;
+
+        map.put(0, 1); // 0 sum as frequency 1 in the beginning.
+
+        for(int i = 0; i < nums.length; i++){
+            sum += nums[i];
+            rem = sum % k;
+            if(rem < 0){
+                rem += k;
+            }
+
+            if(map.containsKey(rem)){
+                ans += map.get(rem);
+                map.put(rem, map.get(rem) + 1);
+            }
+            else{
+                map.put(rem, 1);
+            }
+        }
+        
+        return ans;
+    }
+}
