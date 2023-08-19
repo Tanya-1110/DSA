@@ -32,7 +32,7 @@ Optimal Approach - (Time - O(n), Space - O(1))
 
 Intution - Check if the start element is positive and last element is negative if it is so, just swap the integers otherwise just increases the pointer 
              - if start has negative element, there is no need to swap as it is at its correct position already, So ignore this element by moving pointer ahead (i++).
-             - if end has positive element, it is correctly placed so just decrement end pointer to move it to new postion.
+             - if end has positive element, it is correctly placed so just decrement end pointer (j--) to move it to new postion.
 
 
 import java.util.*;
