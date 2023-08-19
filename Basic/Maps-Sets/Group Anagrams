@@ -1,1 +1,59 @@
 Problem- 
+You have been given an array of strings. You are supposed to return the strings as group of anagrams such that strings belonging to a particular group are anagrams of one another.
+
+An anagram is a word or phrase formed by rearranging the letters of a different word or phase. We can generalise this in string processing by saying that an anagram of a string is 
+another string with the same quantity of each character in it, in any order.
+
+Example -
+
+Input: 4
+       abab baba aabb abbc
+Output: aabb abab baba
+        abbc
+
+Input: 6
+       eat tea tan ate nat bat
+Output: ate eat tea 
+        bat
+        nat tan
+
+There is 1 approach to solve. Mentioned below.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - (Time - O(n*k), Space - O(n*k))
+Here, 'n' is the number of strings in the given arraylist and 'k' is the maximum length of the string.
+
+Intution - Explained in copy.
+
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+
+	public static ArrayList<ArrayList<String>> getGroupedAnagrams(ArrayList<String> inputStr, int n) {
+
+		HashMap<HashMap<Character, Integer>, ArrayList<String>> bmap = new HashMap<>();
+
+		for(String str : inputStr){
+			HashMap<Character, Integer> map = new HashMap<>();
+
+			for(int i = 0; i < str.length(); i++){
+				char ch = str.charAt(i);
+				map.put(ch, map.getOrDefault(ch, 0) + 1);
+			}
+
+			if(bmap.containsKey(map) == false){
+				ArrayList<String> list = new ArrayList<>();
+				list.add(str);
+				bmap.put(map, list);
+			}else{
+				ArrayList<String> list = bmap.get(map);
+				list.add(str);
+			}
+		}
+
+        ArrayList<ArrayList<String>> res = new ArrayList<>();
+		for(ArrayList<String> val : bmap.values()){
+			res.add(val);
+		}
+		return res;
+	}
+}
