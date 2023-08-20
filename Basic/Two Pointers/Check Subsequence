@@ -20,10 +20,10 @@ Input: ABC
 AHBDGC
 Output: True
 
-There are 2 approaches to solve. Mentioned below.
+There are 3 approaches to solve. Mentioned below.
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Naive Approach - (Time - O(n*m), Space - O(1))
+Brute Force Approach (Time Limit Exceeded) - (Time - O(n*m), Space - O(1))
 n and m are the length of both of the strings.
 
 Intution -  Traverse over the length of subsequence if at any stage both characters are matched just increase the cout variable(it denotes the characters of subsequence) 
@@ -60,8 +60,50 @@ public class Solution {
 }
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
+Using Queue Approach - (Time -  O(m), Space - O(n))
+'m' is the length of string 2 original string and 'n' is the length of string 1 target string.
 
-Optimal Approach - (Time - O(m), Space - O(1))
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Solution {
+
+	public static String isSubsequence(String str1, String str2) {
+
+		Queue<Character> que = new LinkedList<>();
+		char[] c1 = str1.toCharArray();
+		char[] c2 = str2.toCharArray();
+
+		// Insert all characters of 'str1' into 'que'.
+		for (char c : c1) {
+			que.add(c);
+		}
+
+		// Iterate all characters of 'str2'.
+		for (char c : c2) {
+
+			// If all characters of 'que' is pop means 'str1' is subsequence.
+			if (que.size() == 0) {
+				return "True";
+			}
+
+			// Check first character of 'que' is same as current character.
+			if (c == que.peek()) {
+				que.remove();
+			}
+		}
+
+		// If 'que' is empty.
+		if (que.size() == 0) {
+			return "True";
+		} else {
+			return "False";
+		}
+	}
+
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Two Pointer Approach (Optimal Approach) - (Time - O(m), Space - O(1))
 m is the length of the original string.
 
 Intution -  We are iterating over the length of the original string if str1 has matching character with str2, then just shift to next position in subsequence(str1) as str2 has its incremenet in position through outer loop.
