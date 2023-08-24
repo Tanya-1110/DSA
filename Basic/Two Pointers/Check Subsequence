@@ -26,7 +26,7 @@ There are 3 approaches to solve. Mentioned below.
 Brute Force Approach (Time Limit Exceeded) - (Time - O(n*m), Space - O(1))
 n and m are the length of both of the strings.
 
-Intution -  Traverse over the length of subsequence if at any stage both characters are matched just increase the cout variable(it denotes the characters of subsequence) 
+Intution -  Traverse over the length of subsequence if at any stage both characters are matched just increase the count variable(it denotes the characters of subsequence) 
             if at the end count matches to the length of the subsequence string, it means that subsequence is the part of the original string so, return true. 
 
 public class Solution {
@@ -121,9 +121,11 @@ public class Solution {
 
         for (int i = 0; i < str2.length(); i++) {
 
-            if (str2.charAt(i) == str1.charAt(j)) j++;
+            if (str2.charAt(i) == str1.charAt(j)) 
+                  j++;
 
-            if (j == n) return "True";
+            if (j == n) 
+               return "True";
 
         }
 
