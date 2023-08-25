@@ -164,7 +164,7 @@ Optimal Approach - (Time - O(n), Space - O(1))
 
 KADANE'S ALGORITHM
 
-Intution - 
+Intution - Explained in Copy.
 
 class Solution {
     public int maxSubArray(int[] nums) {
@@ -216,11 +216,32 @@ class GFG {
 				s = i + 1;
 			}
 		}
-		int length = end - start + 1;
 		
-        System.out.println("Maximum contiguous sum is " + maxSum);
+		int length = end - start + 1;
+		System.out.println("Maximum contiguous sum is " + maxSum);
 		System.out.println("Starting index " + start);
 		System.out.println("Ending index " + end);
 		System.out.println("Length " + length);
+		
+		System.out.println("Maximum Subarray : ");
+		for(int i = start; i <= end; i++){
+		    System.out.print(a[i] + " ");
+		}
+	}
+
+	public static void main(String[] args)
+	{
+		int a[] = {-2, -3, 4, -1, -2, 1, 5, -3};
+		int n = a.length;
+		maxSubArraySum(a, n);
 	}
 }
+
+OUTPUT : 
+
+Maximum contiguous sum is 7
+Starting index 2
+Ending index 6
+Length 5
+Maximum Subarray : 
+4 -1 -2 1 5 
