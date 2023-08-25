@@ -14,9 +14,151 @@ Input: 3
 -3 -5 -6
 Output: 0
 
-There are ---- approaches to solve. Mentioned below.
+There are 5 approaches to solve. Mentioned below.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-NAive Approach - 
+Brute Force Approach - (Time - O(N^3), Space - O(1))
+N is the length of the array.
+
+Intution - Let us check for all possible subarrays of the array. For this, we run two loops, where the outer loop points to the left boundary and the inner loop points to the outer boundary of the subarray. 
+Using another loop inside, find the sum of this subarray. Compare it with the maximum subarray sum obtained so far. After checking all the subarrays, simply return the maximum sum found.
+
+public class Solution {
+
+    public static long maxSubarraySum(int arr[], int n) {
+        long maxSum = 0;
+
+        for(int i = 0; i < n; i++) {
+            for(int j = i; j < n; j++) {
+                long curSum = 0;
+                
+                for(int k = i; k <= j; k++) {
+                    curSum += arr[k];
+                }
+
+                maxSum = Math.max(maxSum, curSum);
+            }
+        }
+
+        return maxSum;
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Boundary Fix Approach - (Time - O(n^2), Space - O(1))
+
+Intution - According to the previous approach, let us fix the left boundary of the subarray in the outer loop. In the inner loop, we move our right boundary by one unit, every time. 
+Let’s say for a particular subarray, we have computed its sum. Now when we move the right boundary by one unit, instead of recomputing the sum for the new subarray all over again, we can simply add the value of the new element to the sum of the previous subarray.
+In this way, we can reduce our time complexity by remembering the previous result.
+
+public class Solution {
+
+    public static long maxSubarraySum(int arr[], int n) {
+    
+        long maxSum = 0;
+
+        for(int i = 0; i < n; i++) {
+            long curSum = 0;
+
+            for(int j = i; j < n; j++) {
+                curSum += arr[j];
+                maxSum = Math.max(maxSum, curSum);
+            }
+        }
+
+        return maxSum;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Divide and Conquer Approach - (Time - O(nlogn), Space - O(n))
+The stack space is used for recursion.
+
+Intution - 
+. Divide the array into 2 halves.
+. Get the answer of left and right parts of the array by recursion.
+. Get the answer of Maximum subarray sum such that the subarray crosses the midpoint.
+. To find the maximum subarray sum of crossing points we need to find the maximum sum starting from mid point and ending at some point on the left of mid, then find the maximum sum starting from mid + 1 and ending with some point on right of mid + 1. Total sum would be the sum of both left part and right part.
+. Maximum of all three sums would be the final answer.
+
+public class Solution {
+
+	private static long crossSum(int[] arr, int low, int high, int mid) {
+		if (low == high) {
+			return arr[low];
+		}
+
+		long leftSubsum = 0;
+		long currSum = 0;
+
+		// maximum subarray sum by including elements on left of mid.
+		for (int i = mid; i > low - 1; --i) {
+			currSum += arr[i];
+			leftSubsum = Math.max(leftSubsum, currSum);
+		}
+
+		long rightSubsum = 0;
+		currSum = 0;
+
+		// maximum subarray sum by include elements on right of mid.
+		for (int i = mid + 1; i < high + 1; ++i) {
+			currSum += arr[i];
+			rightSubsum = Math.max(rightSubsum, currSum);
+		}
+
+		return leftSubsum + rightSubsum;
+	}
+
+	private static long maxSubarraySumHelper(int[] arr, int low, int high) {
+		// if there is only one element.
+		if (low == high) {
+			return arr[low];
+		}
+
+		int mid = (low + high) / 2;
+
+		// left maximum subarray sum
+		long leftSum = maxSubarraySumHelper(arr, low, mid);
+
+		// right maximum subarray sum
+		long rightSum = maxSubarraySumHelper(arr, mid + 1, high);
+
+		// Maximum subarray sum such that the subarray crosses the midpoint.
+		long crossS = crossSum(arr, low, high, mid);
+
+		return Math.max(Math.max(leftSum, rightSum), crossS);
+	}
+
+
+	public static long maxSubarraySum(int[] arr, int n) {
+		return maxSubarraySumHelper(arr, 0, n - 1);
+	}
+
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sum Array Approach - (Time - O(n), Space - O(n))
+
+Intution - Let us start from the left of the array. We maintain an array curSum[], which keeps track of the maximum sum of the subarray ending at the index we’re at. 
+While traversing the array, If the value of curSum[i] becomes negative, we can simply discard this part of the array because it has a negative contribution to the subarray sum. It would be better to just drop that part and have a zero contribution rather than a negative one. Then, we can start anew with the next element. In other words, curSum[i] can be reset to 0.
+The maximum value in the curSum array will be our answer.
+Here, 0L is 0 in long(long is used as we want our answer returned to be in long format otherwise this 0 will act as normal 0 only for comparison. 
+
+public class Solution {
+
+    public static long maxSubarraySum(int arr[], int n) {
+        long curSum[] = new long[n];
+        long maxSum = 0;
+
+        for(int i = 0; i < n; i++) {
+            if(i == 0) {
+                curSum[i] = Math.max(0L, arr[i]);
+            } else {
+                curSum[i] = Math.max(0L, curSum[i-1] + arr[i]);    
+            }
+        
+            maxSum = Math.max(maxSum, curSum[i]);
+        }
+
+        return maxSum;
+    }
+}
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Optimal Approach - (Time - O(n), Space - O(1))
 
@@ -42,11 +184,43 @@ class Solution {
         return max;
     }
 }
-
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Interviewer's Favorite problem 
 - length of subarray
 - elements of subarray
-- start and last index of subarray
+- start and last index of max subarray
 (Explained in copy)
 
+CODE 
 
+import java.io.*;
+import java.util.*;
+class GFG {
+
+	static void maxSubArraySum(int a[], int size)
+	{
+		int maxSum = Integer.MIN_VALUE,
+			sum = 0, start = 0, end = 0, s = 0;
+
+		for (int i = 0; i < size; i++) {
+			sum += a[i];
+
+			if (maxSum < sum) {
+				maxSum = sum;
+				start = s;
+				end = i;
+			}
+
+			if (sum < 0) {
+				sum = 0;
+				s = i + 1;
+			}
+		}
+		int length = end - start + 1;
+		
+        System.out.println("Maximum contiguous sum is " + maxSum);
+		System.out.println("Starting index " + start);
+		System.out.println("Ending index " + end);
+		System.out.println("Length " + length);
+	}
+}
