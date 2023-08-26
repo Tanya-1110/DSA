@@ -51,7 +51,7 @@ public class Solution {
 --------------------------------------------------------------------------------------------------------------------------------------------
 Optimal Approach (HASHING) - (Time - O(n), Space - O(n))
 
-Intution - Explained in copy. 
+Intution - Explained in copy. Frequencies other than 0 results answer as false.
 
   class Solution {
     public boolean isAnagram(String s, String t) {
