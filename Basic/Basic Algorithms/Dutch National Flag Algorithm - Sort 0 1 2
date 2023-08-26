@@ -1,0 +1,85 @@
+Problem - 
+You have been given an array of size 'N'. It only consists of 0s, 1s and 2s. Your task is to sort this array.
+
+Try to solve this problem in linear time, O(n).
+
+Example - 
+Input: 6
+0 1 2 2 1 0
+Output: 0 0 1 1 2 2
+
+Input: 7
+2 2 2 1 1 1 0
+Output: 0 1 1 1 2 2 2
+
+There are 3 approaches to solve. Mentioned below.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Naive Approach - (Time - O(nlogn), Space - O(1))
+
+Intution - Use any good sorting algorithm like Merge Sort, Quick Sort or inbuilt sorting function of different languages. Sort the Array and just return. 
+
+import java.util.Arrays;
+
+public class Solution {
+
+    public static void sort012(int[] arr) {
+        Arrays.sort(arr);
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Better Approach (Frequency of 0 1 2) - (Time - O(2n), Space - O(1))
+Here, we have total 2 iterations, 1st iteration to get the count of 0s, 1s and 2s of the array and 2nd iteration happened when we ran 3 loops summing to the length of an array (N) to fill the array with 0, 1, 2.
+
+Intution - We can exploit the property that we will only have 0s, 1s and 2s in our array.
+. Count the frequency of 0s, 1s and 2s in the array.
+. Start from i=0 and first fill the number of 0s present in the array.
+. Then fill the number of 1s present in the array.
+. Then fill the number of 2s present in the array.
+ Finally, we have the sorted array.
+
+* Time Complexity : O(2*N)
+* Space Complexity : O(1) 
+
+class Solution {
+    public void sortColors(int[] nums) {
+        int count0 = 0;
+        int count1 = 0;
+        int count2 = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0) count0++;
+            else if (nums[i] == 1) count1++;
+            else count2++;
+        }
+        for (int i = 0; i < count0; i++) nums[i] = 0;
+        for (int i = count0; i < count0 + count1; i++) nums[i] = 1;
+        for (int i = count0 + count1; i < nums.length; i++) nums[i] = 2;
+
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach (Dutch National Flag Algorithm) - (Time - O(n), Space - O(1))
+
+Intution - Explained in Copy.
+
+class Solution {
+
+    public void sortColors(int[] nums) {
+        int low = 0, mid = 0, high = nums.length - 1;
+        while (mid <= high) {
+            if (nums[mid] == 0) {
+                int temp = nums[low];
+                nums[low] = nums[mid];
+                nums[mid] = temp;
+                low++;
+                mid++;
+            } else if (nums[mid] == 1) mid++;
+            else {
+                int temp = nums[mid];
+                nums[mid] = nums[high];
+                nums[high] = temp;
+                high--;
+            }
+        }
+    }
+}
