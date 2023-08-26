@@ -1,5 +1,5 @@
 Problem -
-You are given 2 strings, you have to return true if both are eual and false if they are not equal.
+You are given 2 strings, you have to return true if both are equal and false if they are not equal.
 
 Two strings are said to be anagram, if they contain same characters irrespective of their order of occurences in both of the string.
 
@@ -17,7 +17,7 @@ There are 2 approaches to solve. Mentioned below.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 Sorting Approach (naive approach)  - (Time - O(nlogn), Space - O(1))
 
-Intution - Sort the 2 char arrays and check if they are anagrams by using Arrays.equals function which compares array elements by traversal so it takes o(n) time complexity and sorting takes O(logn) time complexity totals upto (nlogn).
+Intution - Sort the 2 char arrays and check if they are anagrams by using Arrays.equals function which compares array elements by traversal so it takes o(n) time complexity and sorting takes O(nlogn) time complexity = O(n) + O(nlogn) = O(nlogn).
 
 import java.util.Arrays;
 
@@ -35,7 +35,6 @@ public class Solution {
 		char[] arr1 = str1.toCharArray();
 		char[] arr = str2.toCharArray();
 
-		
 		Arrays.sort(arr1);
 		Arrays.sort(arr2);
 
@@ -50,9 +49,9 @@ public class Solution {
 	}
 }
 --------------------------------------------------------------------------------------------------------------------------------------------
-Optimal Approach - (Time - O(n), Space - O(n))
+Optimal Approach (HASHING) - (Time - O(n), Space - O(n))
 
-  Intution - Explained in copy. Values() function can have any kind of integer value even negative depicting 1 string has got same characters as that of other string string but at higher frequency like "ccaa" and "ccac". Pls better explain this example in copy.
+Intution - Explained in copy. 
 
   class Solution {
     public boolean isAnagram(String s, String t) {
@@ -74,15 +73,6 @@ Optimal Approach - (Time - O(n), Space - O(n))
                 return false;
             }
         }
-        
         return true;
     }
 }
-  
-  
-  
-  
-
-
-
-  
