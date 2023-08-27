@@ -115,11 +115,10 @@ public class Solution {
 			if (count == 0) {
 				majorityElement = arr[i];
 				count = 1;
-				continue;
 			}
 
 			// Increment the count if the current element of the array is equal to the current majority element, else decrement it.
-			if (arr[i] == majorityElement) {
+			else if (arr[i] == majorityElement) {
 				count++;
 			} else {
 				count--;
