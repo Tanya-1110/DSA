@@ -1,14 +1,14 @@
 Problem -
 You are given two arrays 'A' and 'B' of size 'N' and 'M' respectively. Both these arrays are sorted in non-decreasing order. You have to find the intersection of these two arrays.
 Intersection of two arrays is an array that consists of all the common elements occurring in both arrays.
-Note : Both the arrays are sorted in nondecreasing order. The output should be in the order of elements that occur in the original arrays. If there is no intersection present then
+Note : Both the arrays are sorted in non-decreasing order. The output should be in the order of elements that occur in the original arrays. If there is no intersection present then
        return an empty array.
 
 Example -
 Input: 6 4
 1 2 2 2 3 4
 2 2 3 3
-Output: 2 2 3 3 
+Output: 2 2 3 
 
 Input: 1 1
 3
@@ -17,9 +17,17 @@ Output: -1
 
 There are 2 approaches to solve. Mentioned below.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Naive Approach - (Time - O(n+m), Space - O(n))
+Naive Approach (HASHING) - (Time - O(n+m), Space - O(n))
 
-space is O(n) bcz of use of hashmap.
+Time complexity is O(N + M) as we are traversing on the lengths of both the arrays. 
+Space is O(n) bcz of creation of hashmap for n length array.
+
+Intution - 
+. We have just created the hashmap for 1st array to store frequencies of all its elements.
+. And for 2nd array, we have checked if current element of 2nd array is present in hashmap or not.
+. If hashmap contains the element of array 2, then simply add the element to the answer arraylist and decrease its frequency by 1 (as hashmap stores frequency, not order of elements so if even elements can repeat in array after some distance).
+. And if the frequency of element reaches to 0, it means remove it from hashmap as there is no need of it(if same element in array 2 repeats and if hashmap stores 0 frequency, then as per code its freq will change to -1, which is useless) so better remove it.
+. Finally return the list with common elements as aswer.
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,12 +73,11 @@ public class Solution
         return ans;
     }
 }
-
-
 -----------------------------------------------------------------------------------------------------------------------------------------
-Optimal Approach - (Time - O(min(n,m)), Space - O(min(n,m)))
+Optimal Approach (TWO POINTER Approach) - (Time - O(max(n,m)), Space - O(1)
+We are traversing both the arrays simultaneously. Therefore time complexity will be maximum of ‘M’ and ‘N’
 
-Intution - we have used 2 pointers as both the arrays are sorted.
+Intution - We can use two pointers to solve this problem. The main idea to use two pointers is that the arrays are sorted. 
 
 import java.util.* ;
 import java.io.*; 
