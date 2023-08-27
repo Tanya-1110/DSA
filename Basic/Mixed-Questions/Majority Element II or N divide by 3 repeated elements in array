@@ -16,46 +16,51 @@ There are 4 approaches to solve. Mentioned below.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Brute Force Approach - (Time - O(n^2), Space - O(1))
 
-Intution - The idea is to count the number of times each element occurs and if any element occurs more than N/3 times, then include it in our answer.
+Intution - The idea is to count the number of times each element occurs and if any element occurs more than N/3 times, then include it in our answer and the resultanat list cannot have elements more than 2.
+We will run a loop that will select the elements of the array one by one.
+Now, for each unique element, we will run another loop and count its occurrence in the given array.
+If any element occurs more than the floor of (N/3), we will include it in our answer. 
+While traversing if we find any element that is already included in our answer, we will just skip it.
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 
-public class Solution 
-{
-    public static ArrayList<Integer> majorityElementII(ArrayList<Integer> arr) 
-    {
+public class tUf {
+    public static List<Integer> majorityElement(int []v) {
+        int n = v.length; //size of the array
+        List<Integer> ls = new ArrayList<>(); // list of answers
 
-        int n=arr.size();
-
-        // Array for storing final answer.
-        ArrayList<Integer> majorityElement=new ArrayList<Integer>();
-
-        // Iterate through the array.
-        for (int i = 0; i < n; i++) 
-        {   
-            // Variable for storing the frequency of the current element.
-            int count = 0;
-            
-            // Iterate through the array to find the frequency of the current element.
-            for(int j=0; j < n; j++)
-            {
-                // Increment count if we find a element with value equal to current element.
-                if((int)arr.get(i) == (int)arr.get(j)){
-                    count += 1;
+        for (int i = 0; i < n; i++) {
+            //selected element is v[i]:
+            // Checking if v[i] is not already
+            // a part of the answer:
+            if (ls.size() == 0 || ls.get(0) != v[i]) {
+                int cnt = 0;
+                for (int j = 0; j < n; j++) {
+                    // counting the frequency of v[i]
+                    if (v[j] == v[i]) {
+                        cnt++;
+                    }
                 }
-                
+
+                // check if frquency is greater than n/3:
+                if (cnt > (n / 3))
+                    ls.add(v[i]);
             }
-            // Store the current element if its frequency is more than n/3 and if it is not already stored.
-	    if (count > n / 3 && (majorityElement.size() == 0 || (majorityElement.size() != 2 && (int)majorityElement.get(majorityElement.size() - 1) != (int)arr.get(i))))
-            {
-                majorityElement.add(arr.get(i));
-            }
+
+            if (ls.size() == 2) break;
         }
 
-        // Return all the stored majority elements.
-        return majorityElement;
+        return ls;
+    }
 
+    public static void main(String args[]) {
+        int[] arr = {11, 33, 33, 11, 33, 11};
+        List<Integer> ans = majorityElement(arr);
+        System.out.print("The majority elements are: ");
+        for (int i = 0; i < ans.size(); i++) {
+            System.out.print(ans.get(i) + " ");
+        }
+        System.out.println();
     }
 }
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
