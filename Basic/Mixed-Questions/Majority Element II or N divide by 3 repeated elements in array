@@ -158,78 +158,59 @@ Note: We can prove using the pigeonhole principle that there are at most 2 eleme
       ‘FIRST_CANDIDATE’ and ‘SECOND_COUNT’ respectively.
 
 
-import java.util.ArrayList;
+import java.util.*;
 
-public class Solution {
-    public static ArrayList<Integer> majorityElementII(ArrayList<Integer> arr) {
-        int n = arr.size();
+public class tUf {
+    public static List<Integer> majorityElement(int []v) {
+        int n = v.length; //size of the array
 
-        // Array for storing final answer.
-        ArrayList<Integer> majorityElement=new ArrayList<Integer> ();
+        int cnt1 = 0, cnt2 = 0; // counts
+        int el1 = Integer.MIN_VALUE; // element 1
+        int el2 = Integer.MIN_VALUE; // element 2
 
-        // Variables for storing the elements which may occur more than n/3 times.
-        int firstCandidate = 0, secondCandidate = 0;
-
-        // Variables for storing the frequency of the candidate elements.
-        int firstCount = 0, secondCount = 0;
-
-        // Iterate through the array.
+        // applying the Extended Boyer Moore's Voting Algorithm:
         for (int i = 0; i < n; i++) {
-            // Increment firstCount if the current element is equal to firstCandidate.
-            if (arr.get(i) == firstCandidate) {
-                firstCount = firstCount + 1;
-            }
-
-            // Increment secondCount if the current element is equal to secondCandidate.
-            else if (arr.get(i) == secondCandidate) {
-                secondCount = secondCount + 1;
-            }
-            // Change value of the firstCandidate to the current element if firstCount is equal to 0.
-            else if (firstCount == 0) {
-                firstCandidate = arr.get(i);
-                firstCount = 1;
-            }
-
-            // Change value of the secondCandidate to the current element if secondCount is equal to 0.
-            else if (secondCount == 0) {
-                secondCandidate = arr.get(i);
-                secondCount = 1;
-            }
-
-            // Otherwise decrement firstCount and secondCount by 1.
+            if (cnt1 == 0 && el2 != v[i]) {
+                cnt1 = 1;
+                el1 = v[i];
+            } else if (cnt2 == 0 && el1 != v[i]) {
+                cnt2 = 1;
+                el2 = v[i];
+            } else if (v[i] == el1) cnt1++;
+            else if (v[i] == el2) cnt2++;
             else {
-                firstCount = firstCount - 1;
-                secondCount = secondCount - 1;
+                cnt1--; cnt2--;
             }
         }
 
-        firstCount = 0;
-        secondCount = 0;
+        List<Integer> ls = new ArrayList<>(); // list of answers
 
-        // Iterate through the array to find frequency of firstCandidate and secondCandidate.
+        // Manually check if the stored elements in
+        // el1 and el2 are the majority elements:
+        cnt1 = 0; cnt2 = 0;
         for (int i = 0; i < n; i++) {
-            // Increment firstCount if the current element is equal to firstCandidate.
-            if (arr.get(i) == firstCandidate) {
-                firstCount = firstCount + 1;
-            }
-
-            // Increment secondCount if the current element is equal to secondCandidate.
-            else if (arr.get(i) == secondCandidate) {
-                secondCount = secondCount + 1;
-            }
+            if (v[i] == el1) cnt1++;
+            if (v[i] == el2) cnt2++;
         }
 
-        // Include firstCandidate in the answer if its frequency is more than n/3.
-        if (firstCount > n / 3) {
-            majorityElement.add(firstCandidate);
-        }
+        int mini = (int)(n / 3) + 1;
+        if (cnt1 >= mini) ls.add(el1);
+        if (cnt2 >= mini) ls.add(el2);
 
-        // Include secondCandidate in the answer if its frequency is more than n/3.
-        if (secondCount > n / 3) {
-            majorityElement.add(secondCandidate);
-        }
+        // Uncomment the following line
+        // if it is told to sort the answer array:
+        //Collections.sort(ls); //TC --> O(2*log2) ~ O(1);
 
-        // Return all stored majority elements.
-        return majorityElement;
+        return ls;
+    }
+
+    public static void main(String args[]) {
+        int[] arr = {11, 33, 33, 11, 33, 11};
+        List<Integer> ans = majorityElement(arr);
+        System.out.print("The majority elements are: ");
+        for (int i = 0; i < ans.size(); i++) {
+            System.out.print(ans.get(i) + " ");
+        }
+        System.out.println();
     }
 }
