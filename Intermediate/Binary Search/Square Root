@@ -1,1 +1,109 @@
+Problem -
+You have to find the square root of the positive integer 'n'. If n is not a perfect square, then return the floor value of sqrt(n).
+Note : for n = 28, sqrt(28) is 5.29 but we have to return floor(5.28) so answer is 5.
+       for n = 35, sqrt(35) is 5.91 which is close to 6 but 6 can't be an answer as 6*6 = 36 which is damn sure more than 35 and can never be possible answer but 5*5 = 25 which is small than 35 (5 is the maximum possible answer for the square root of 35)
 
+Example -
+Input: 6
+Output: 2  (The square root of the given number 6 lies between 2 and 3, so the floor value is 2.)
+
+Input: 100
+Output: 10
+
+There are 3 approaches to solve. Mentioned below.
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Brute Force - Time - O(logn), Space - O(1)
+Use in-built java math function sqrt to calculate square root of a number.
+
+import java.util.*;
+import java.lang.Math;
+
+public class tUf {
+    public static int floorSqrt(int n) {
+        int ans = (int) Math.sqrt(n);
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        int n = 28;
+        int ans = floorSqrt(n);
+        System.out.println("The floor of square root of " + n + " is: " + ans);
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+Brute Force (linear Search) - Time - O(n), Space - O(1)
+
+Intution - we are storing the number as answer if its product with itself is less than or equal to given number n. And as the product crosses the limit of n, that number(i) can never make an answer so break out of the loop and return the answer stored bcz of previous iteration.
+           For ex - n = 35, for i = 1, 1*1 = 1 <= 35 [1 can be the possible answer , but we want bigger so store it in ans variable and move ahead to check for bigger value of i.]
+                            for i = 2, 2*2 = 4 <= 35 [ 2 can be our answer, so update previous i to 2.]
+                            similarly for i = 3, 3*3 = 9 <= 35 [ans = 3], for i = 4, 4*4 = 16 <= 35 [ans = 4]
+                            for i = 5, 5*5 = 25 <=35 [ans = 5]
+                            for i = 6, 6*6 = 36 > 35 [as 36 is greater than 35 and 6 can never form our answer, so just break out of the loop and return the previous strored answer(i) = 5 (MXIMUM POSSIBLE SQUARE ROOT)]
+                            ans = 5 is returned on the screen.
+
+import java.util.*;
+
+public class Main{
+   public static int squareRoot(int n){
+      int ans = 1;
+      for(int i = 1; i <= n; i++){
+           if(i*i <= n){
+              ans = i;
+          }else{
+              break;
+          }
+      }
+      return ans;
+  }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach (BINARY SEARCH) - Time - O(logn), Space - O(1)
+
+Intution - The primary objective of the Binary Search algorithm is to efficiently determine the appropriate half to eliminate, thereby reducing the search space by half. 
+           It does this by determining a specific condition that ensures that the target is not present in that half.
+
+Now, we are not given any sorted array on which we can apply binary search. But, if we observe closely, we can notice that our answer space i.e. [1, n] is sorted. So, we will
+apply binary search on the answer space.
+
+Algorithm:
+The steps are as follows:
+We will declare a variable called ‘ans’.
+
+1. Place the 2 pointers i.e. low and high: Initially, we will place the pointers. The pointer low will point to 1 and the high will point to n.
+2. Calculate the ‘mid’: Now, inside a loop, we will calculate the value of ‘mid’ using the following formula:
+       mid = (low+high) // 2 ( ‘//’ refers to integer division)
+3. Eliminate the halves accordingly: 
+   . If mid*mid <= n: On satisfying this condition, we can conclude that the number ‘mid’ is one of the possible answers. So, we will store ‘mid’ in the variable ‘ans’. 
+     But we want the maximum number that holds this condition. So, we will eliminate the left half and consider the right half(i.e. low = mid+1).
+
+   . Otherwise, the value mid is larger than the number we want. This means the numbers greater than ‘mid’ will not be our answers and the right half of ‘mid’ consists of 
+     such numbers. So, we will eliminate the right half and consider the left half(i.e. high = mid-1).
+
+4. Finally, the ‘ans’ variable will be storing our answer. In addition to that, the high pointer will also point to the same number i.e. our answer. So, we can return either of 
+   the ‘ans’ or ‘high’.
+The steps from 2-3 will be inside a loop and the loop will continue until low crosses high.
+
+Note: In this case, the ‘high’ pointer serves as our answer, eliminating the need for an additional ‘ans’ variable. Therefore, it is perfectly acceptable to omit the use of an
+      extra variable to store the answer. Consequently, in the following code, no additional variable is utilized for storing the answer.
+
+
+import java.util.*;
+
+public class tUf {
+    public static int floorSqrt(int n) {
+        int low = 1, high = n;
+        //Binary search on the answers:
+        while (low <= high) {
+            long mid = (low + high) / 2;
+            long val = mid * mid;
+            if (val <= (long)(n)) {
+                //eliminate the left half:
+                low = (int)(mid + 1);
+            } else {
+                //eliminate the right half:
+                high = (int)(mid - 1);
+            }
+        }
+        return high;
+    }
+}
