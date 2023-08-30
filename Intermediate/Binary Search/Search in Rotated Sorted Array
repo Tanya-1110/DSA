@@ -1,0 +1,93 @@
+Problem - 
+Given an integer array arr of size N, sorted in ascending order (with distinct values) and a target value k. Now the array is rotated at some pivot point unknown to you. 
+Find the index at which k is present and if k is not present return -1.
+
+Example :
+Input: arr = [4,5,6,7,0,1,2,3], k = 0
+Output: 4
+
+Input: [4,5,6,7,0,1,2], k = 3
+Output: -1
+
+There are 2 approaches to solve. Mentioned below.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Brute Approach - Time - O(n), Space - O(1)
+
+Intution - One straightforward approach we can consider is using the linear search algorithm. Using this method, we will traverse the array to find the location of the target value. 
+           If it is found we will simply return the index and otherwise, we will return -1.
+
+public class Solution {
+
+    public static int search(int arr[], int key) {
+        int n = arr.length;
+
+        // Iterate through the array
+        for (int i = 0; i < n; i++) {
+        	
+        	// key is found
+            if (arr[i] == key) {
+                return i;
+            }
+        }
+        
+        // key not found
+        return -1;
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach (Binary Search) - Time - O(logn), Space - O(1)
+
+Intution - Here, we can easily observe, that we have to search in a sorted array. That is why, we can think of using the Binary Search algorithm to solve this problem.
+           We will be following a simple two-step process. 
+
+1. First, we identify the sorted half of the array. 
+2. Once found, we determine if the target is located within this sorted half. 
+     If not, we eliminate that half from further consideration. 
+     Conversely, if the target does exist in the sorted half, we eliminate the other half.
+
+
+public class Solution {
+    public static int search(int arr[], int key) {
+
+        int start = 0;
+        int end = arr.length - 1;
+
+         // Performing binary search
+        while(start <= end){
+
+            int mid = start + (end - start)/2;
+
+            if(arr[mid] == key){
+                return mid;
+            }
+
+            // left part to the current mid is sorted.
+            if(arr[start] <= arr[mid]){
+                if(arr[start] <= key && key <= arr[mid]){
+
+                    // Element lies towards left of mid.
+                    end = mid - 1;
+                }else{
+
+                    // Element lies towards right of mid.
+                    start = mid + 1;
+                }
+            }
+
+            // else right part is sorted.
+            else{
+                if(arr[mid] <= key && key <= arr[end]){
+
+                    // Element lies towards right of mid.
+                    start = mid + 1;
+                }else{
+                    
+                    // Element lies towards left of mid.
+                    end = mid - 1;
+                }
+            }
+        }
+
+        return -1;
+    }
+}
