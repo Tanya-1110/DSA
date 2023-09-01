@@ -1,1 +1,165 @@
 Problem -
+Given an array of N integers. Every number in the array except one appears twice. Find the single number in the array.
+
+Example -
+Input: 5 
+1 1 3 5 5 
+Output: 3
+
+Input: 5
+1 1 4 4 15
+Output: 15
+
+There are 4 approaches to solve. Mentioned below.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Brute Approach 1 - Time - O(n), Space - O(1)
+(ARRAY TRAVERSAL)
+
+Intution - A crucial observation to note is that if an element appears twice in a sequence, either the preceding or the subsequent element will also be the same. 
+           But only for the single element, this condition will not be satisfied. So, to check this the condition will be the following: 
+
+      If arr[i] != arr[i-1] and arr[i] != arr[i+1]: If this condition is true for any element, arr[i], we can conclude this is the single element.
+Edge Cases:
+. If n == 1: This means the array size is 1. If the array contains only one element, we will return that element only.
+. If i == 0: This means this is the very first element of the array. The only condition, we need to check is: arr[i] != arr[i+1].
+. If i == n-1: This means this is the last element of the array. The only condition, we need to check is: arr[i] != arr[i-1].
+So, we will traverse the array and we will check for the above conditions.
+
+import java.util.ArrayList;
+public class Solution
+{
+    public static int singleNonDuplicate(ArrayList<Integer> arr)
+    {
+        int n = arr.size();
+
+        // For one-sized array, an element will be single only.
+        if(n == 1)
+           return arr.get(0);
+
+        // For first index
+        if(!arr.get(0).equals(arr.get(1)))
+           return arr.get(0);   
+
+        // For last index
+        if(!arr.get(n-1).equals(arr.get(n-2)))
+           return arr.get(n-1);
+
+        // For remaining elements
+        for(int i = 1; i < n-1; i++){
+            if(!arr.get(i).equals(arr.get(i-1)) && !arr.get(i).equals(arr.get(i+1)))
+               return arr.get(i);
+        }
+
+        // Dummy return statement.
+        return -1; 
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Brute Approach 2 - Time - O(n), Space - O(1)
+BIT MANIPULATION (XOR)
+
+Intution - We can simplify the above approach using the XOR operation. We need to remember 2 important properties of XOR:
+
+. a ^ a = 0, XOR of two same numbers results in 0.
+. a ^ 0 = a, XOR of a number with 0 always results in that number.
+
+Now, if we XOR all the array elements, all the duplicates will result in 0 and we will be left with a single element.
+
+import java.util.*;
+
+public class tUf {
+    public static int singleNonDuplicate(ArrayList<Integer> arr) {
+        int n = arr.size(); //size of the array.
+        int ans = 0;
+
+        // XOR all the elements:
+        for (int i = 0; i < n; i++) {
+            ans = ans ^ arr.get(i);
+        }
+        return ans;
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Better Appproach - Time - O(n), Space - O(n)
+HASHMAP 
+
+Intution - We will calculate the frequency of each element and will return the element with 1 frequency from the hashmap.
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class Solution {
+    public static int singleNonDuplicate(ArrayList < Integer > arr) {
+        int n = arr.size();
+
+        // Declare a hashMap
+        HashMap < Integer, Integer > hash = new HashMap < Integer, Integer > ();
+
+        // Store frequency of elements of array in hashMap
+        for (int i = 0; i < n; i++) {
+
+            if (hash.containsKey(arr.get(i))) {
+                hash.put(arr.get(i), hash.get(arr.get(i)) + 1);
+            } else {
+                hash.put(arr.get(i), 1);
+            }
+
+        }
+        int ans = 0;
+
+        // Find the element having frequency equal to 1 and return it
+        for (int i = 0; i < n; i++) {
+
+            if (hash.get(arr.get(i)) == 1) {
+                ans = arr.get(i);
+            }
+        }
+        return ans;
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - Time - O(logn), Space - O(1)
+BINARY SEARCH
+
+Intution - Explained in copy.
+
+class Solution {
+    public int singleNonDuplicate(int[] nums) {
+        int n = nums.length;
+
+        // Edge cases:
+        if(n == 1)
+          return nums[0];
+
+        if(nums[0] != nums[1])
+          return nums[0];
+
+        if(nums[n-2] != nums[n-1])
+          return nums[n-1];
+
+        int start = 1;
+        int end = n-2;
+
+        // Performing Binary Search
+        while(start <= end){
+            int mid = start + (end - start)/2;
+
+            // If arr[mid] is the single element:
+            if(nums[mid-1] != nums[mid] && nums[mid] != nums[mid+1])
+               return nums[mid];
+
+            // We are in the left:
+            if((mid % 2 == 0 && nums[mid] == nums[mid+1]) || (mid % 2 == 1 && nums[mid-1] == nums[mid]))   
+             // eliminate left part as elements are in pair on left part and single element will occur in right part.
+             start = mid + 1;
+
+              // We are in the right:
+             else 
+             // eliminate right part as elements are in pair on right part and single element will occur in left part.
+                end = mid - 1;
+        }
+
+        // Dummy return statement:
+        return -1;
+    }
+}
