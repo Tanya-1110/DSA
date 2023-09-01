@@ -69,7 +69,18 @@ NESTED BINARY SEARCH
     and 'MAX' and 'MIN' are the minimum and maximum element of the matrix, respectively. By just traversing the first column, we find the minimum element and by just 
     traversing the last column, we find the maximum element.
 
-Intution - Explained in copy.
+Intution - Steps are mentioned below.
+
+Step 1: Find the minimum and maximum element in the given array. By just traversing the first column, we find the minimum element and by just traversing the last column, we find the maximum element.
+
+Step 2: Now find the middle element of the array one by one and check in the matrix how many elements are present in the matrix.
+
+Three cases can occur:-
+
+. If count ==  (r*c+1)/2 , so it may be the answer still we mark max as mid since we are not referring indices , we are referring the elements and 5 elements can be smaller than 6 also and 7 also , so to confirm we mark max as mid.
+. If count<(r*c+1)/2 , we mark  min as mid+1 since curr element or elements before it cannot be the answer.
+. If count>(r*c+1)/2 , we mark max as mid , since elements after this can only be the  answer now.
+
 
 public class Main {
   public static int countSmallerThanMid(int[] A, int mid, int n) {
