@@ -15,6 +15,12 @@ Output: 5, The maximum possible minimum distance between any two cows will be 5 
 There are 2 approaches to solve. Mentioned below.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Brute Approach - 
+Time Complexity -  O(NlogN) + O(N *(max(stalls[])-min(stalls[]))), 
+                  where N = size of the array, max(stalls[]) = maximum element in stalls[] array, min(stalls[]) = minimum element in stalls[] array.
+        Reason: O(NlogN) for sorting the array. We are using a loop from 1 to max(stalls[])-min(stalls[]) to check all possible distances. Inside the loop, we are calling 
+                canWePlace() function for each distance. Now, inside the canWePlace() function, we are using a loop that runs for N times.
+
+Space Complexity - O(1) as we are not using any extra space to solve this problem.
 
 Intution - The extremely naive approach is to check all possible distances from 1 to max(stalls[])-min(stalls[]). The maximum distance for which the function canWePlace() returns true, will be our answer.
 Algorithm:
@@ -52,6 +58,7 @@ public class tUf {
                 return (i - 1);
             }
         }
+         // As for all values from 1 to limit, cows can be placed while while maintaining maximum possible distance, return limit(all cows are placed and maximum possible dist was at limit).   
         return limit;
     }
     public static void main(String[] args) {
@@ -65,7 +72,33 @@ public class tUf {
 Optimal Approach - 
 BINARY SEARCH
 
+Time Complexity - O(NlogN) + O(N * log(max(stalls[])-min(stalls[]))), 
+                 where N = size of the array, max(stalls[]) = maximum element in stalls[] array, min(stalls[]) = minimum element in stalls[] array.
+       Reason: O(NlogN) for sorting the array. We are applying binary search on [1, max(stalls[])-min(stalls[])]. Inside the loop, we are calling canWePlace() function for 
+               each distance, ‘mid’. Now, inside the canWePlace() function, we are using a loop that runs for N times.
+
+Space Complexity - O(1) as we are not using any extra space to solve this problem.
+
 Intution -
+
+Algorithm:
+
+. First, we will sort the given stalls[] array.
+. Place the 2 pointers i.e. low and high - Initially, we will place the pointers. The pointer low will point to 1 and the high will point to (stalls[n-1]-stalls[0]). 
+  As the ‘stalls[]’ is sorted, ‘stalls[n-1]’ refers to the maximum, and ‘stalls[0]’ is the minimum element.
+. Calculate the ‘mid’ -  Now, inside the loop, we will calculate the value of ‘mid’ using the following formula:
+                   mid = (low+high) // 2 ( ‘//’ refers to integer division)
+. Eliminate the halves based on the boolean value returned by canWePlace() - We will pass the potential distance, represented by the variable ‘mid’, to the ‘canWePlace()‘ 
+                                                                             function. This function will return true if it is possible to place all the cows with a minimum 
+                                                                             distance of ‘mid’.
+
+      1. If the returned value is true -  On satisfying this condition, we can conclude that the number ‘mid’ is one of our possible answers. But we want the maximum number. 
+                                          So, we will eliminate the left half and consider the right half(i.e. low = mid+1).
+      2. Otherwise, the value mid is greater than the distance we want. This means the numbers greater than ‘mid’ should not be considered and the right half of ‘mid’ 
+         consists of such numbers. So, we will eliminate the right half and consider the left half(i.e. high = mid-1).
+. Finally, outside the loop, we will return the value of high as the pointer will be pointing to the answer.
+
+The steps from 3-4 will be inside a loop and the loop will continue until low crosses high.
 
 import java.util.*;
 
