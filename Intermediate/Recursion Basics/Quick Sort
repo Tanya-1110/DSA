@@ -1,1 +1,208 @@
 Problem - 
+Given an array of n integers, sort the array using the Quicksort method.
+
+Example - 
+Input: 5
+4 2 5 1 3
+Output: 1 2 3 4 5
+
+Input: 4     
+6 2 4 1
+Output: 1 2 4 6
+
+There is 1 approach to solve. Mentioned below.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+RECURSIVE Approach -
+
+Intution - We know that the given array should be broken down into subarrays. But while implementing, we are not going to break down and create any new arrays. Instead, we 
+           will specify the range of the subarrays using two indices or pointers(i.e. low pointer and high pointer) each time while breaking down the array.
+
+The algorithm steps are the following for the quickSort() function:
+
+1. Initially, the low points to the first index and the high points to the last index(as the range is n i.e. the size of the array). 
+2. After that, we will get the index(where the pivot should be placed after sorting) while shifting the smaller elements on the left and the larger ones on the right using a 
+   partition() function discussed later. Now, this index can be called the partition index as it creates a partition between the left and the right unsorted subarrays.
+3. After placing the pivot in the partition index(within the partition() function specified), we need to call the function quickSort() for the left and the right subarray 
+   recursively. So, the range of the left subarray will be [low to (partition index – 1)] and the range of the right subarray will be [(partition index + 1) to high]. 
+4. This is how the recursion will continue until the range becomes 1.
+
+Here, pivot element is the first elemnt of the array.
+
+Now, let’s understand how to implement the partition() function to get the partition index.
+
+1. Inside the function, we will first select the pivot(i.e. arr[low] in our case).
+2. Now, we will again take two-pointers i and j. The i pointer points to low and the j points to high.
+3. Now, the pointer i will move forward and find the first element that is greater than the pivot. Similarly, the pointer j will move backward and find the first element 
+   that is smaller than the pivot. Here, we need to add some checks like i <= high-1 and j >= low+1. Because it might happen that i is standing at high and trying to proceed 
+   or j is standing at low and trying to exceed.
+4. Once we find such elements i.e. arr[i] > pivot and arr[j] < pivot, and i < j, we will swap arr[i] and arr[j].
+5. We will continue step 3 and step 4, until j becomes smaller than i.
+6. Finally, we will swap the pivot element(i.e. arr[low]) with arr[j] and will return the index j i.e. the partition index.
+
+Note: In the function, we have kept the elements equal to the pivot on the left side. If you choose to place them on the right, check 1 will be arr[i] < pivot and check 2 will be arr[j] >= pivot.
+
+
+import java.util.*;
+
+class Solution {
+    static int partition(List<Integer> arr, int low, int high) {
+        int pivot = arr.get(low);
+        int i = low;
+        int j = high;
+
+        while (i < j) {
+            while (arr.get(i) <= pivot && i <= high - 1) {
+                i++;
+            }
+
+            while (arr.get(j) > pivot && j >= low + 1) {
+                j--;
+            }
+            if (i < j) {
+                int temp = arr.get(i);
+                arr.set(i, arr.get(j));
+                arr.set(j, temp);
+            }
+        }
+        int temp = arr.get(low);
+        arr.set(low, arr.get(j));
+        arr.set(j, temp);
+        return j;
+    }
+
+    static void qs(List<Integer> arr, int low, int high) {
+        if (low < high) {
+            int pIndex = partition(arr, low, high);
+            qs(arr, low, pIndex - 1);
+            qs(arr, pIndex + 1, high);
+        }
+    }
+    public static List<Integer> quickSort(List<Integer> arr) {
+        // Write your code here.
+        qs(arr, 0, arr.size() - 1);
+        return arr;
+    }
+}
+
+public class tUf {
+    public static void main(String args[]) {
+        List<Integer> arr = new ArrayList<>();
+        arr = Arrays.asList(new Integer[] {4, 6, 2, 5, 7, 9, 1, 3});
+        int n = arr.size();
+        System.out.println("Before Using insertion Sort: ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr.get(i) + " ");
+        }
+        System.out.println();
+        arr = Solution.quickSort(arr);
+        System.out.println("After insertion sort: ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr.get(i) + " ");
+        }
+        System.out.println();
+    }
+
+} 
+
+Time Complexity: O(N*logN), where N = size of the array.
+Reason: At each step, we divide the whole array, for that logN and n steps are taken for partition() function, so overall time complexity will be N*logN.
+
+The following recurrence relation can be written for Quick sort : 
+
+F(n) = F(k) + F(n-1-k) 
+Here k is the number of elements smaller or equal to the pivot and n-1-k denotes elements greater than the pivot.
+
+There can be 2 cases :
+
+Worst Case – This case occurs when the pivot is the greatest or smallest element of the array. If the partition is done and the last element is the pivot, then the worst 
+             case would be either in the increasing order of the array or in the decreasing order of the array. 
+
+Recurrence:
+F(n) = F(0)+F(n-1)  or  F(n) = F(n-1) + F(0) 
+Worst Case Time complexity: O(n2) 
+
+Best Case – This case occurs when the pivot is the middle element or near to middle element of the array.
+
+Recurrence :
+F(n) = 2F(n/2)
+
+Time Complexity for the best and average case: O(N*logN)
+
+Space Complexity: O(1) + O(N) [auxiliary stack space]. = O(1)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Pivot element is last/ rightmost element of the array.
+
+
+import java.util.Arrays;
+
+class Quicksort {
+
+  // method to find the partition position
+  static int partition(int array[], int low, int high) {
+    
+    // choose the rightmost element as pivot
+    int pivot = array[high];
+    
+    // pointer for greater element
+    int i = (low - 1);
+
+    // traverse through all elements
+    // compare each element with pivot
+    for (int j = low; j < high; j++) {
+      if (array[j] <= pivot) {
+
+        // if element smaller than pivot is found
+        // swap it with the greatr element pointed by i
+        i++;
+
+        // swapping element at i with element at j
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+
+    }
+
+    // swapt the pivot element with the greater element specified by i
+    int temp = array[i + 1];
+    array[i + 1] = array[high];
+    array[high] = temp;
+
+    // return the position from where partition is done
+    return (i + 1);
+  }
+
+  static void quickSort(int array[], int low, int high) {
+    if (low < high) {
+
+      // find pivot element such that
+      // elements smaller than pivot are on the left
+      // elements greater than pivot are on the right
+      int pi = partition(array, low, high);
+      
+      // recursive call on the left of pivot
+      quickSort(array, low, pi - 1);
+
+      // recursive call on the right of pivot
+      quickSort(array, pi + 1, high);
+    }
+  }
+}
+
+// Main class
+class Main {
+  public static void main(String args[]) {
+
+    int[] data = { 8, 7, 2, 1, 0, 9, 6 };
+    System.out.println("Unsorted Array");
+    System.out.println(Arrays.toString(data));
+
+    int size = data.length;
+
+    // call quicksort() on array data
+    Quicksort.quickSort(data, 0, size - 1);
+
+    System.out.println("Sorted Array in Ascending Order: ");
+    System.out.println(Arrays.toString(data));
+  }
+}
