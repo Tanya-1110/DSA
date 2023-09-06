@@ -1,0 +1,172 @@
+Problem -
+For the two given sorted arrays of sizes 'M' and 'N', your task is to find the 'k'th element(1 based indexing) in the sorted array of length 'M + N' made by merging both the arrays in sorted fashion.
+You are given an integer 'k'.
+Note - Try to solve this problem without extra space.
+
+Example -
+Input: 4 3 4     -> [M, N, k]
+1 4 7 10         -> [Arr 1]
+2 5 6            -> [Arr 2]
+Output: 5
+
+Input: 1 1 2
+7
+1
+Output: 7
+
+There are 3 approaches to solve. Mentioned below.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Brute Approach - 
+        Time - O((M + N) * log(M + N)), 
+        Space - O(M + N))
+    where ‘M’ is the size of the array/list ‘ARR1’ and ‘N’ is the size of ‘ARR2’.
+    As we are sorting an array of length ‘M + N’. 
+    As we are using an extra array/list of length ‘M + N’.
+
+Intution - The idea is very simple. We will make a new array/list say ‘ARR3’ by appending ‘ARR1’ at end of ‘ARR2’ or by appending ‘ARR2’ at the end of ‘ARR1’. We will sort 
+           ‘ARR3’ and can easily return the ‘K’th element.
+
+Algorithm:
+
+1. Let’s make an integer array/list ‘ARR3’ of length ‘M+N’.
+2. Iterate over ‘ARR1’ for 0 <= i <= ‘M’ and do:
+‘ARR3[i]’ = ‘ARR1[i]’
+3. Iterate over ‘ARR2’ for 0 <= i <= ‘N’ and do:
+‘ARR3[i+M]’ = ‘ARR2[i]’
+4. Sort the array ‘ARR3’.
+5. Return ‘ARR3[K - 1]’.
+
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class Solution {
+    public static int findKthElement(ArrayList<Integer> arr1, ArrayList<Integer> arr2, int k) {
+        int m = arr1.size();
+        int n = arr2.size();
+    
+        int[] arr3 = new int[m + n];
+    
+        // Merging 'ARR1' and 'ARR2' in 'ARR3'.
+        for (int i = 0; i < m; i++)
+        {
+            arr3[i] = arr1.get(i);
+        }
+        for (int i = 0; i < n; i++)
+        {
+            arr3[i + m] = arr2.get(i);
+        }
+        // We need to sort the new array.
+        Arrays.sort(arr3);
+        return arr3[k - 1];         // 1 based indexing.
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Better Approach (Traverse Alternatively) - Space Complexity is reduced.
+  Time - O(M + N), where ‘M’ is the size of the array/list ‘ARR1’ and ‘N’ is the size of ‘ARR2’.
+         In the worst case, we have to iterate both arrays/lists completely.
+  Space - O(1), as we are using consant extra space.
+
+Intution - In the earlier approach, we used an extra array/list ‘ARR3’ to store the elements of both arrays/lists, but we did not make any use of the fact that both arrays 
+           are sorted. This time we will traverse both the arrays/lists simultaneously and alternatively. We will traverse the arrays/lists in such a way that it can give us 
+           the final sorted array/list.
+
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+    public static int findKthElement(ArrayList<Integer> arr1, ArrayList<Integer> arr2, int k) {
+        // Write your code here.
+        int i = 0;
+        int j = 0;
+        int count = 0;                // This count variable will count the total number of elements we have iterated so far in ‘ARR1’ and ‘ARR2’.
+        int n = arr1.size();
+        int m = arr2.size();
+
+        while (i < n && j < m) {
+            if (arr1.get(i) < arr2.get(j)) {
+                count++;
+                if (count == k) {
+                    return arr1.get(i);
+                }
+                i++;
+            } else {
+                count++;
+                if (count == k) {
+                    return arr2.get(j);
+                }
+                j++;
+            }
+        }
+
+        // Iterating over the remaining elements of 'ARR1'.
+        while (i < n) {
+            count++;
+            if (count == k) {
+                return arr1.get(i);
+            }
+            i++;
+        }
+
+         // Iterating over the remaining elements of 'ARR2'.
+        while (j < m) {
+            count++;
+            if (count == k) {
+                return arr2.get(j);
+            }
+            j++;
+        }
+        return -1;
+    }
+}
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach (Recursive Approach) / (Binary Approach) 
+ Time - O(Min (logn, logm))
+    where m and n are lengths of 2 sorted arrays. Here in binary search approach we are traversing over smallest length amongst 2. 
+ Space - O(1) we are using constant space.
+
+Intution - Best explained in the striver BS-22. 
+
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int n1 = nums1.length;
+        int n2 = nums2.length;
+        int n = n1 + n2;
+
+        // We want to perform analysis on the smallest length array amongst the 2 given array.
+        if(n1 > n2)  
+           return findMedianSortedArrays(nums2, nums1);
+
+        There will be k elements on the left.  
+        int left = k;
+        int low = Math.max(0, k - n2); 
+        int high = Math.min(n1, k);
+
+        while(low <= high){
+
+            int mid1 = (low + high)/2;
+            int mid2 = left - mid1;
+
+            int l1 = Integer.MIN_VALUE;
+            int l2 = Integer.MIN_VALUE;
+            int r1 = Integer.MAX_VALUE;
+            int r2 = Integer.MAX_VALUE;
+
+            if(mid1 < n1)    r1 = nums1[mid1];
+            if(mid2 < n2)    r2 = nums2[mid2];
+            if(mid1 - 1 >= 0)     l1 = nums1[mid1 - 1];
+            if(mid2 - 1 >= 0)     l2 = nums2[mid2 - 1];
+
+            if(l1 <= r2 && l2 <= r1){
+                    return Math.max(l1, l2);
+              
+            }else if(l1 > r2)
+                high = mid1 - 1;
+                else
+                   low = mid1 + 1;
+        }
+        return 0;
+    }
+}
+
+// Time Complexity = O(MIN (logn1, logn2))
+// Space Complexity = O(1)
