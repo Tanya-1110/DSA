@@ -1,0 +1,65 @@
+Problem -
+Akash is a member of Ninja club. He has a weird family structure. Every male member(M) gives birth to a male child first and then a female child, whereas every female(F) member gives birth to a female child first and then to a male child. Akash analyses this pattern and wants to know what will be the kth child in his Nth generation.
+Note - the generation tree starts with a male member i.e., Aakash. Every member has exactly two children.
+
+Example -
+Input: 2 2 
+Output: Female
+
+Input: 3 4  
+Output: Male
+
+There is 1 approach to solve. Mentioned below.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+RECURSION 
+
+Intution - The idea is to find the gender of the parent of the Kth child in Nth generation. Now, if the Kth child of the Nth generation is the first child of its parent, then
+           it’s gender will be the same as the parent’s gender else it will be the opposite. This can be done recursively. 
+ 
+Algorithm: 
+
+1. The idea is to use recursion.
+2. Base condition, If 'N' or 'K' is 1, return “Male”, as the first child of every generation is male.
+3. Find the parent of the Kth child of Nth generation. It will be floor((K + 1) / 2). Store it in a variable “par”.
+4. Note that the generation of the parent is “N - 1”. Thus, the parent will be the floor((K + 1) / 2)th child of (N - 1)th generation.
+5. Recursively find the gender of the parent and store it in a string "parGender". If the Kth child of Nth generation is the first child of its parent, i.e. if 'K' is equal to (2 * par - 1), return the gender of the parent ("genParent").
+6. Else, return the gender opposite of its parent’s gender. If its parent is “Male”, return “Female” else return “Male”.
+
+/*
+    Time Complexity: O(min(N, log(K)))
+    Space Complexity: O(N)
+
+    Where N is the generation number and K is the position of the child in the Nth generation. 
+*/
+
+public class Solution {
+
+	public static String kthChildNthGeneration(int n, long k) {
+		
+		// Base Condition
+		if (n == 1 || k == 1) {
+			return "Male";
+		}
+		
+		// Parent of the Kth child of Nth generation
+		long par = (k + 1) / 2;
+
+		// Recursively find the gender of the parent
+		String parGender = kthChildNthGeneration(n - 1, par);
+
+		// If Kth child of Nth generation is the first child of its parent
+		if (k == 2 * par - 1) {
+			return parGender;
+		}
+		
+		// If Kth child of Nth generation is the second child of its parent
+		else {
+			if (parGender == "Male") {
+				return "Female";
+			}
+			else {
+				return "Male";
+			}
+		}
+	}
+}
