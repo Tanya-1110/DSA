@@ -25,12 +25,12 @@ Algorithm:
 5. Recursively find the gender of the parent and store it in a string "parGender". If the Kth child of Nth generation is the first child of its parent, i.e. if 'K' is equal to (2 * par - 1), return the gender of the parent ("genParent").
 6. Else, return the gender opposite of its parent’s gender. If its parent is “Male”, return “Female” else return “Male”.
 
-/*
-    Time Complexity: O(min(N, log(K)))
-    Space Complexity: O(N)
+Time Complexity - O(min(N, log(K)), where N is the number of generations and K is the position of the child in the Nth generation. 
+             We are doing a constant amount of work in each recursive call and there will be at-most min(N, log(K)) recursive calls. Thus, the final time complexity is O(N). 
 
-    Where N is the generation number and K is the position of the child in the Nth generation. 
-*/
+Space Complexity - O(N), where N is the number of generations. 
+                   We are calling the same recursive function (N - 1) times. Thus, recursion stack space is required of the size (N - 1). Hence, the space complexity is O(N). 
+
 
 public class Solution {
 
