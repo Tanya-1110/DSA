@@ -1,1 +1,93 @@
-Problem -
+Problem -  Other variant to this problem can be "Binary String with no consecutive 0s"(It can also be solved by just a little modification).
+You have been given an integer 'N'. Your task is to generate and return all binary strings of length 'N' such that there are no consecutive 1's in the string.
+A binary string is that string which contains only ‘0’ and ‘1’.
+For Example: Let ‘N'=3, hence the length of the binary string would be 3. We can have the following binary strings with no consecutive 1s: 000 001 010 100 101
+
+Example -
+Input: 4
+Output: 0000 0001 0010 0100 0101 1000 1001 1010 
+
+Input: 2
+Output: 00 01 10
+
+There is 1 approach to solve. Mentioned below.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Recursive Approach 
+
+Time Complexity - O(2 ^ N), ‘N’ is the length of the string.
+                  For every character, we have 2 choices either put a ‘0’ or a ‘1’ hence for ‘N’ choices we will have a total time complexity of order of O(2 ^ N).
+
+Space Complexity - O(N), ‘N’ is the length of the string
+                   The recursive stack uses space of the order O(N).
+
+Intution - We are following the 2 rules to make binary strings of given length 'N' -
+           1. We are adding '0' to the strings regardless with which bits(0, 1) they are ending as both 00 nad 01 are acceptable.
+           2. But we are adding '1' to only those strings that are ending '0' as if we will add 1 to the string ending '1' will cause the string to have consecutive 1s which is not acceptable.
+
+
+import java.util.*;
+
+public class Solution {
+
+    public static List<String> generateString(int N) {
+
+        List<String> result = new ArrayList<>();
+
+        // Recursive function
+        f("", N, result);
+        return result;
+
+    }
+
+    public static void f(String current, int n, List<String> result) {
+
+        // for n == 0, there is no binary string possible.
+        if (n == 0) {
+            result.add(current);
+            return;
+        }
+
+        // recursively calling this function to add '0' and reducing the length of the string as one character i.e., 0 is added.
+        f(current + "0", n - 1, result);
+
+        // recursively calling this function on the condition that the current string doesn't ends with '1'
+        if (!current.endsWith("1"))
+            f(current + "1", n - 1, result);
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Additional Question - Return the number of binary strings of given length 'N' with no consecutive 1s.(above question was returning the possible binary strings with no consecutive 1s)
+
+Example -
+Input: 3
+Output: 5
+
+Input: 4
+Output: 8
+
+Time - O(n), Space - O(1)
+
+public class Binary {
+     
+    public static int countBinary(int N)
+    {
+        if(N < 1)
+            return 0;
+        int C0 = 1;
+        int C1 = 1;
+         
+        for(int i=1; i<N; i++)
+        {
+            int temp = C1;
+            C1 = C0;
+            C0 = C0 + temp;
+        }
+         
+        return C0 + C1;
+    }
+     
+    public static void main(String args[])
+    {
+            System.out.print(countBinary(4));
+    }
+}
