@@ -1,1 +1,138 @@
-Problem -
+Problem - 
+Given a singly Linked list of integers. Your task is to return the head of the reversed linked list.
+Example - The given linked list is 1 -> 2 -> 3 -> 4-> NULL. Then the reverse linked list is 4 -> 3 -> 2 -> 1 -> NULL and the head of the reversed linked list will be 4.
+
+Example -
+Input: 1 2 3 4 5 6 -1
+Output: 6 5 4 3 2 1 -1
+
+Input: 10 21 3 2 4 -1
+Output: 4 2 3 21 10 -1
+
+There are 5 approaches to solve. Mentioned below.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Iterative Approach (OPTIMAL) 3 Pointer Approach 
+
+Time Complexity - O(N), Traversing over the linked list of size N (N is number of nodes). 
+Space Complexity - O(1), constant space is required.
+
+Intution - The idea is to use three pointers curr, prev, and next to keep track of nodes to update reverse links.
+
+ALORGITHM - Follow the steps below to solve the problem:
+1. Initialize three pointers prev as NULL, curr as head, and next as NULL.
+2. Iterate through the linked list. In a loop, do the following:
+ . Before changing the next of curr, store the next node 
+      next = curr -> next
+ . Now update the next pointer of curr to the prev 
+      curr -> next = prev 
+ . Update prev as curr and curr as next 
+      prev = curr 
+      curr = next
+
+public class Solution 
+{
+    public static LinkedListNode<Integer> reverseLinkedList(LinkedListNode<Integer> head) 
+    {
+
+	  // 3 pointers prev, curr and next are created to keep track of Linked List. 
+    LinkedListNode prev = null;
+		LinkedListNode curr = head;
+		LinkedListNode next = null;
+
+		while(curr != null){
+			next = curr.next;
+			curr.next = prev;
+			prev = curr;
+			curr = next;
+		}
+
+    // head of reverse Linked List
+		return prev;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Recursion Approach (Better Approach) 
+
+Time - O(N), In the worst case, we are traversing the whole Linked List O(N) using recursion, Hence, the overall complexity will be O(N).
+Space - O(N), In the worst case, extra space is required for the recursion stack.
+
+Intution - The idea is to reach the last node of the linked list using recursion then start reversing the linked list.
+
+ALGORITHM - Follow the steps below to solve the problem:
+1. We divide the linked list of N nodes into two parts. i.e head and rest of the Linked List with (N-1) nodes.
+2. Now recursively reverse the (N-1) nodes of Linked List and return the head of this part i.e rest. After the reversal, the next node of the head will be the last node of the reversed Linked List and the head will be pointing to this node.
+3. But for the complete reversal of the Linked List, the head should be the last node. So, we do the following:
+    . head.next.next = head, where head.next is the last node of the reverse Linked List.
+    . head.next = NULL
+4. Return the head pointer of the reversed Linked List i.e. return rest.
+
+
+public class Solution 
+{
+    public static LinkedListNode<Integer> reverseLinkedList(LinkedListNode<Integer> head) 
+    {
+        // Base condition
+        if (head == null || head.next == null) 
+	      {
+            // Return the last node.
+             return head;
+        }
+
+        // Reverse the rest of Linked List
+        LinkedListNode<Integer> rest = reverseLinkedList(head.next);
+
+        // Changing the reference of next node next to itself
+        head.next.next = head;
+
+        // Assign current node next to NULL.
+        head.next = null;
+
+        // Return the reverse Linked List.
+        return rest;
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+USING STACK (Better)
+
+Time - O(N), In the worst-case, iterating the whole linked list O(N) and popping all nodes from the stack takes O(N). Hence, overall complexity will be O(N)+ O(N) i.e. O(N). 
+Space - O(N), In the worst case, extra space is required to store all nodes of the Linked List in the stack.
+
+Intuition - The idea is to store the all the nodes in the stack then make a reverse linked list.
+
+ALGORITHM -
+
+1. Iterate through all nodes of the Linked list and push it to stack.
+2. Then update the head pointer to the top node of the stack.
+3. Then start popping each node from the stack and then assign the popped node next pointer to the top element of the stack.
+4. At the last update the next pointer of the last node in the stack to null.
+5. Now, return the head.
+
+    static void reverseLL()
+    {
+ 
+        // Create a stack "s" of Node type
+        Stack<Node> s = new Stack<>();
+        Node temp = head;
+        while (temp.next != null) {
+            // Push all the nodes in to stack
+            s.add(temp);
+            temp = temp.next;
+        }
+        head = temp;
+        while (!s.isEmpty()) {
+            // Store the top value of stack in list
+            temp.next = s.peek();
+            // Pop the value from stack
+            s.pop();
+            // update the next pointer in the list
+            temp = temp.next;
+        }
+        temp.next = null;
+    }
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
