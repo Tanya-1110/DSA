@@ -35,7 +35,7 @@ public class Solution
     {
 
 	  // 3 pointers prev, curr and next are created to keep track of Linked List. 
-    LinkedListNode prev = null;
+                LinkedListNode prev = null;
 		LinkedListNode curr = head;
 		LinkedListNode next = null;
 
@@ -46,7 +46,7 @@ public class Solution
 			curr = next;
 		}
 
-    // head of reverse Linked List
+          // head of reverse Linked List
 		return prev;
     }
 }
@@ -73,7 +73,7 @@ public class Solution
     {
         // Base condition
         if (head == null || head.next == null) 
-	      {
+	{
             // Return the last node.
              return head;
         }
@@ -109,27 +109,33 @@ ALGORITHM -
 
     static void reverseLL()
     {
- 
         // Create a stack "s" of Node type
         Stack<Node> s = new Stack<>();
         Node temp = head;
+
         while (temp.next != null) {
             // Push all the nodes in to stack
             s.add(temp);
             temp = temp.next;
         }
+
         head = temp;
         while (!s.isEmpty()) {
             // Store the top value of stack in list
             temp.next = s.peek();
+
             // Pop the value from stack
             s.pop();
+
             // update the next pointer in the list
             temp = temp.next;
         }
+
         temp.next = null;
     }
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+EXTRA QUESTION - REVERSED LINKED LINK II
 
 
 
