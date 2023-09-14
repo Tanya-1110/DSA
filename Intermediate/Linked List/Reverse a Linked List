@@ -203,22 +203,27 @@ class Solution {
         if (head.next == null)
             return head;
 
-        
+       // Traverse the linked list so that left2 represents the starting node of the list to be reversed and left1 represents the node before the left2.
         while(left-- > 1){
             left1=left2;
             left2=left2.next;
         }
 
+        // Traverse the linked list such that, right2 represents the end node of the list to be reversed. right1 represents the immediate node after right1.  
         while(right-- >= 1){
             right2=right1;
             right1=right1.next;
         }
-        
+
+         // Isolating the Linked list that is to be reversed.
         if (l != 1)
             left1.next=null;
         
         right2.next=null;
-        
+
+        // The intention of making the condition l!=1 is that, if the given left most node is head , it is important to have it remebered. otherwise the traversal for the linked list will not get the head node.
+        // Try it by removing the condition if you wanna see what happens 😊. The Next part of code is for reversal of the isolated linked list.
+
         ListNode prev=null, next=null, curr=left2;
 
         while(curr != null){
@@ -227,6 +232,8 @@ class Solution {
             prev = curr;
             curr = next;
         }
+
+        // Here comes the part where we will make the isolated reversed linked list connected with the original linked list.
         if (l == 1){
             head.next = right1;
             return prev;
