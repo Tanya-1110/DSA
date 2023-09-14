@@ -9,7 +9,7 @@ Output: 6 5 4 3 2 1 -1
 Input: 10 21 3 2 4 -1
 Output: 4 2 3 21 10 -1
 
-There are 5 approaches to solve. Mentioned below.
+There are 3 approaches to solve. Mentioned below.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Iterative Approach (OPTIMAL) 3 Pointer Approach 
 
