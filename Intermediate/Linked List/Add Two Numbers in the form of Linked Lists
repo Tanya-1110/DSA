@@ -14,7 +14,7 @@ Input: 2
 Output: 1 0 1
 Explanation - 'num1' represents 2 and 'num2' represents 99. Their sum is 101.
 
-There are approaches to solve. Mentioned below.
+There are 2 approaches to solve. Mentioned below.
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ITERATIVE APPROACH -
 
@@ -96,12 +96,42 @@ public class Solution {
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 SPACE OPTIMIZED APPROACH -
 
-    Time Complexity - O(M + N), 
-    Space Complexity - O(1), 
+    Time Complexity - O(M + N), We are traversing both the linked lists completely and it takes O(L) (where L is the number of nodes in the list) time to traverse each list.
+    Space Complexity - O(1), In the worst case, only one new node needs to be created i.e. when the sum generates a carry.
 
     Where 'M' and 'N' are the number of nodes in the two linked lists.
 
-Intution - 
+Intution - The idea behind this approach is exactly similar to the previous approach. But here, instead of creating a new list for storing the sum, we use any one of the two
+           linked lists to store the sum list.
+Note: Here we have used the first linked list to store the sum list. We can also use the second list but the idea will remain the same.
+
+The Steps are as follows:
+
+1. Let 'node1' and 'node2' denote the current node of the first list and the second list, respectively.
+2. Initially, 'node1' = 'num1' and 'node2' = 'num2'
+3. Create two variables ‘sum’ and ‘carry’ which will be used to store the sum and carry generated in the current iteration and initialize them with zero.
+4. Create another variable 'prev' to store the previous node of the linked list, and initialize it with NULL.
+5. Repeat the following steps until any one the lists is exhausted i.e. 'node1' != NULL and 'node2' != NULL:
+    . Add the values in the current nodes of the two linked lists along with the carry to generate the resulting sum i.e. ‘sum’ = 'node1'.data + 'node2'.data + 'carry'.
+    . Store the next node of the sum list in the first linked list by updating the current node’s data value as 'node1'.data = ‘sum’ % 10.
+    . Update the carry as 'carry' = ‘sum’ / 10.
+    . Keep track of the previous node by setting 'prev' = 'node1'.
+    . Move to the next node:
+         'node1' = 'node1'.next
+         'node2' = 'node2'.next
+6. Check any of list contain the remaining digits, i.e. if 'node1' != NULL or 'node2' != NULL:
+     . We need to add the remaining digits to the sum list.
+     . If 'node2' != NULL, list 1 is empty and list 2 contains the remaining digits. So, set 'prev'.next = 'node2'.
+     . Set, 'node1' = 'prev'.next.
+     . Add the remaining digits to the sum list by repeating the following operation until 'node1' becomes NULL:
+         . ‘sum’ = 'node1'.data + 'carry'
+         . Store the next digit by updating the current node’s data value 'node1'.data = ‘sum’ % 10.
+         . Update the carry as 'carry' = ‘sum’ / 10.
+         . Keep track of the previous node by setting 'prev' = 'node1'.
+         . Move to the next node, 'node1' = 'node1'.next
+7. Now, we have added both lists. But it is possible that carry is generated from the last iteration. So, if 'carry' > 0, add a new node to the sum list having 
+   data = ‘carry’.
+8. Return the head of the sum list i.e. 'num1'.
 
 
 public class Solution{
