@@ -17,8 +17,7 @@ Approach
 Time Complexity - O(N^2) , where N is length of linked list. We are using 2 while loops, outer loop is running for whole length and inner loop is running everytime from dummy node(dummy node is fixed at the beginning).
 Space Complexity - O(1), only 1 extra dummy node is created.
 
-Intution -
-
+Intution - Explained in copy.
 
 public class Solution {
 
