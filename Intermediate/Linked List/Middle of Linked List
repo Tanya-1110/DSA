@@ -1,1 +1,89 @@
 Problem -
+Given a singly Linked List of 'N' nodes. The objective is to determine the middle node of a singly linked list. However, if the list has an even number of nodes, we return 
+the second middle node.
+
+Example -
+Input: 1 2 3 4 5
+Output: 3 4 5
+
+Input: 1 2 3 4 5 6
+Output: 4 5 6
+
+There are 2 approaches to solve. Mentioned below.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Count Nodes Approach : 
+
+    Time complexity: O(N), Since we need to traverse the linked list twice first to find the number of elements and secondly again to find the middle node the overall 
+                           complexity is the order of ‘N’.
+    Space complexity: O(1), we are using constant space.
+
+      Where 'N' is the number of elements in the linked list.
+
+Intution - We are simply traversing the linked list to get the count of number of nodes. And after getting the count, we are dividing it by 2 to get the middle element and 
+           then we are again traversing the linked list till mid value and where the pointer stops, we are just returning the list after that pointer. 
+
+    public class Solution
+    {
+        public static Node findMiddle(Node head)
+        {
+            // Take a pointer p to traverse the linked list, initially pointing to head node
+            Node p = head;
+
+            // Take a variable numberOfNodes to count the number of nodes in the linked list
+            int numberOfNodes = 0;
+
+            // Count the nodes
+            while (p != null)
+            {
+                numberOfNodes++;
+                p = p.next;
+            }
+
+            int mid = numberOfNodes / 2;
+
+            // Find the mid node
+            Node ptr = head;
+            while (mid>0)
+            {
+                ptr = ptr.next;
+                mid--;
+            }
+
+            return ptr;
+        }
+    }
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TWO POINTERS APPROACH :
+
+    Time complexity: O(N), We traverse using the ‘fast’ pointer till it reaches the end of the linked list. In each iteration we jump 2 steps, therefore the time complexity 
+                           is order of N/2 i.e O(N).
+    Space complexity: O(1), We are using constant space.
+
+    Where 'N' is the number of elements in the linked list
+
+Intution - We can find the midpoint of the linked list without finding the number of elements.
+1. We initialise 2 pointers ‘fast’ and ‘slow’ both pointing to head initially.
+2. We traverse the linked list until fast is the last element or fast is beyond the linked list i.e it points to NULL.
+3. In each iteration, the ‘fast’ pointer jumps 2 times faster as compared to ‘slow’ pointer.
+4. Finally, once the loop terminates, ‘slow’ pointer will be pointing to the middle element of the linked list, hence we return the ‘slow’ pointer.
+
+
+public class Solution
+{
+    public static Node findMiddle(Node head)
+    {
+        // If head is null, then simply return null and if head is the only element in the linked list then it is the only middle element, so return head only.
+        if(head == null || head.next == null)
+           return head;
+
+        Node fast = head;
+        Node slow = head;
+
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        return slow;
+    }
+}
