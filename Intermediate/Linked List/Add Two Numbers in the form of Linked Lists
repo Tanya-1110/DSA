@@ -1,0 +1,18 @@
+Problem -
+You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. 
+Add the two numbers and return the sum as a linked list.
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+Example - 
+Input: 1 2 3
+4 5 6
+Output: 5 7 9 
+Explanation - 'num1' represents the number 321 and 'num2' represents 654. Their sum is 975.
+ 
+Input: 2
+9 9
+Output: 1 0 1
+Explanation - 'num1' represents 2 and 'num2' represents 99. Their sum is 101.
+
+There are approaches to solve. Mentioned below.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
