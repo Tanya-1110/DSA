@@ -1,0 +1,198 @@
+Problem -
+Given a singly linked list, you have to detect the loop and remove the loop from the linked list, if present. You have to make changes in the given linked list itself and return 
+the updated linked list.
+Expected Complexity: Try doing it in O(n) time complexity and O(1) space complexity. Here, n is the number of nodes in the linked list.
+
+Example -
+Input: 6 2
+1 2 3 4 5 6 
+Output: 1 2 3 4 5 6 
+
+There are 3 approaches to solve. Mentioned Below.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Naive Approach - Outer And Inner Loop
+    
+    Time Complexity: O(N^2), For every iteration of outer-loop we are iterating the linked-list again.
+    Space Complexity: O(1), Constant space is used.
+
+INTUTION - We are going to have two loops outer-loop and inner-loop.
+1. Maintain a count of the number of nodes visited in outer loop.
+2. For every node of the outer-loop, start the inner loop from the head and maintain a  prev node to store the previous node of the current outer loop node.
+3. If the inner-loop visits the node next to the outer-loop node, then a cycle exist,we will simply set the prev node's next as NULL that will break the cycle and return the 
+   linked list else repeat the process for the next iteration of outer-loop.
+4. If outer-loop reaches the end of list or null, then no cycle exist, return head.
+
+import java.util.ArrayList;
+
+public class Solution {
+  public static Node removeLoop(Node head) {
+
+    int numberOfNodesPassed = 0; 
+    Node prev = null;
+    Node outerLoopNode = head;
+    while (outerLoopNode != null) {
+
+        numberOfNodesPassed += 1;
+        prev = outerLoopNode;
+        outerLoopNode = outerLoopNode.next; 
+        Node innerLoopNode = head;
+        int counterForInnerLoop = numberOfNodesPassed; 
+
+        while (counterForInnerLoop > 0){
+        
+            //  We found a repetitive Node/ Cycle
+            if (innerLoopNode == outerLoopNode){
+
+                prev.next = null;
+                return head;
+            }
+
+            innerLoopNode = innerLoopNode.next; 
+            counterForInnerLoop -= 1;
+        }
+    }
+
+    // We didn't found any Cycle.
+    return head;
+  }
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+HASHSET APPROACH - Look Up Table Approach
+
+    Time Complexity: O(N), We would be visiting every node once, as soon as we encounter a multiple visit on a node, then we will stop execution.
+    Space Complexity: O(N), At most we will put all the N nodes into the loop up table.
+
+    where 'N' is the number of nodes in the list.   
+
+Intution - We are going to maintain a lookup table(a Hashmap) that basically tells if we have already visited a node or not, during the course of traversal.
+1. Visit every node one by one, until null is not reached.
+2. Declare ‘PREV’ that will store the previous node of the current node.
+3. Check if the current node is present in the loop up table, if present then there is a cycle and will set the next value of ‘PREV’ node as NULL that will break the cycle and
+   return the linked list otherwise, put the node reference into the lookup table update the ‘PREV’ node and repeat the process.
+4. If we reach at the end of the list or null, then we can come out of the process or loop, and finally, we can say the loop doesn't exist.
+
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+
+public class Solution {
+  public static Node removeLoop(Node head) {
+    // LookUp table to store the visited nodes.    
+    Set<Node> lookUp = new HashSet<Node>();
+
+    Node prev = null;
+    Node cur = head;
+
+    while (cur != null){
+
+        if (lookUp.contains(cur)){
+            // We reached some earlier node again thus we found a cycle
+            prev.next = null;
+            return head;
+        }
+        else{
+            // Add the node to hastset of already seen nodes
+            lookUp.add(cur);
+            prev = cur;
+        }
+
+        cur = cur.next;
+    }
+
+    // We didn't found any Cycle
+    return head;
+  }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+OPTIMAL APPROACH (FLOYD'S CYCLE FINDING ALGORITHM)
+
+    Time Complexity: O(N), every time through different function calls, we are traversing the linked list only 1 time. 
+    Space Complexity: O(1), Constant space is used.
+
+    where 'N' is the number of nodes in the list.
+
+Intution - Look for dry run in copy.
+
+What is Floyd's Cycle-Finding algorithm ?
+
+1. It is also called Hare-Tortoise algorithm which is used to find a loop in a linked list. 
+2. The algorithm works by using two pointers, a slow pointer and a fast pointer.
+3. Initially, both pointers are set to the head of the linked list.
+4. The fast pointer moves twice as fast as the slow pointer.
+5. If there is a cycle in the linked list, eventually, the fast pointer will catch up with the slow pointer.
+6. If there is no cycle, the fast pointer will reach the end of the linked list.
+
+
+import java.util.ArrayList;
+
+public class Solution {
+
+// Function which removes the loop by first detecting the loop through 'floydloopdetect' function and then detecting the starting node through 'findstartingnodeloop' function.
+    public static Node removeLoop(Node head) {
+
+        if(head == null){
+           return head;
+        }
+     
+        Node startnode = findstartingnodeloop(head);
+
+        if(startnode == null){
+            return head;
+        }
+
+        Node temp = startnode;
+
+        while(temp.next != startnode){
+            temp = temp.next;
+        }
+  
+        temp.next = null;
+
+        return head;
+    }
+
+// Function to get the starting node from where loop is starting in linked list.
+    public static Node findstartingnodeloop(Node head){
+
+        if(head == null){
+           return head;
+        }
+
+         Node common = floydloopdetect(head);
+
+         if(common == null){
+            return null;
+         } 
+      
+         Node slow = head;
+
+         while(slow != common){
+            slow = slow.next;
+            common = common.next;
+         } 
+
+         return slow;
+     }
+
+ // Function call made to detect whether there is a loop in the linked list or not using floyd cycle finding algorithm. If there is a loop return either slow or fast as 
+ // both points to same element only.  
+     public static Node floydloopdetect(Node head){
+
+          if(head == null){
+              return head;
+          }
+
+          Node slow = head;
+          Node fast = head;
+ 
+          while(fast != null && fast.next != null){
+               slow = slow.next;
+               fast = fast.next.next;
+
+               if(slow == fast){
+                   return fast;
+               }
+           }
+           return null;
+       }
+}
