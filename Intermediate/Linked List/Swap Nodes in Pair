@@ -1,0 +1,104 @@
+Problem -
+You are given a singly linked list of integers. Your task is to swap every two adjacent nodes and return the head of modified linked list.
+Note - If a pair of a node does not exist, then leave the node as it is. Also you must solve the problem without modifying the values in the list's nodes 
+       (i.e., only nodes themselves may be changed.)
+
+Example -
+Input: 11 21 13 14 15 -1
+Output: 21 11 14 13 15 -1
+
+Input: -13 14 -21 18 -20 30 -1
+Output: 14 -13 18 -21 30 -20 -1
+
+There are 2 approaches to solve. Mentioned below.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+RECURSIVE APPROACH - (NAIVE APPROACH)
+
+    Time Complexity: O(N), as we are traversing only 1 time.
+    Space Complexity: O(N), We are iterating in the list through the recursion, and for each pair, we have to push the function into the call stack. So there can be total 
+                      “N/2” pairs, and the recursion call stack can grow up to “N/2” depth. So overall space complexity is O(N).
+
+    where 'N' is the number of nodes in the singly linked list.
+
+Intution - We traverse the linked list using recursion and consider two nodes at a time and swap their links and pass the next pair information to recursion.
+
+1. The base case will be if the linked list is empty or contains one node then simply return the head.
+2. Let’s say we have two elements of nodes for a particular pair.
+		         'FIRST' = 'HEAD'
+		         'SECOND' = 'HEAD' -> 'NEXT'
+3. Store the node of the list after two-node of “HEAD” because only links of these two nodes (“FIRST” and “SECOND”) are going to change for the current pair. 
+   Let’s say “REMAININGNODE”.
+	          'REMAINING-NODE' = 'SECOND' -> 'NEXT'
+4. For the current pair, our new head will be “SECOND”. So store that as “NEW-HEAD”.
+		        'NEW-HEAD' = 'SECOND'
+5. Change the next of the second node as the head. Because after swapping, the “FIRST” node will be the “SECOND” node, and the “SECOND” node will be “FIRST”.
+	          'SECOND' -> 'NEXT' = 'FIRST'
+6. Call recursively for “REMAININGNODE” and store the modified head (what we will get from recursion) as “FIRST→NEXT”.
+7. Return the modified head of the linked list, i.e. “NEWHEAD”.
+
+
+public class Solution {
+	public static Node pairsSwap(Node head) {
+
+		// Base case : we can not swap.
+		if (head == null || head.next == null) {
+			return head;
+		}
+
+		Node first = head;
+		Node second = head.next;
+
+		// Only first and second is going to change so store remainingNode.
+		Node remainingNode = second.next;
+
+		// Get a newHead.
+		Node newHead = second;
+
+		// Change next of second node.
+		second.next = head;
+
+		// Get the next of first.
+		first.next = pairsSwap(remainingNode);
+
+		// Return modified head.
+		return newHead;
+	}
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ITERATIVE APPROACH - (BETTER APPROACH)
+
+    Time Complexity: O(N), as we are traversing only 1 time.
+    Space Complexity: O(1), Constant space is used.
+
+    where 'N' is the number of nodes in the singly linked list.
+
+Intution - Explained in copy.
+
+public class Solution {
+	public static Node pairsSwap(Node head) {
+
+		if(head == null || head.next == null)
+		    return head;
+
+		Node pointer = new Node(0);
+		pointer.next = head;
+		Node res = head.next;
+
+		while(pointer.next.next != null){
+			Node first = pointer.next;
+			Node second = pointer.next.next;
+			Node tail = second.next;
+
+			pointer.next = second;
+			second.next = first;
+			first.next = tail;
+
+			pointer = pointer.next.next;
+
+      if(pointer.next == null)		
+			   break;
+		}	
+
+		return res;
+	}
+}
