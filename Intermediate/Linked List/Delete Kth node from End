@@ -12,28 +12,159 @@ Output: 2 3
 
 There are 3 approaches to solve. Mentioned below.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Optimal Approach 
+Using Lists Approach (NAIVE APPROACH) -
+
+    Time Complexity: O(N), In the worst-case, we will be iterating the whole linked list. Hence, the overall complexity will be O(N). 
+    Space Compexity: O(N), In the worst case, we will be storing all nodes of the linked list in a new list.
+
+    Where 'N' is the total nodes in Linked List.
+
+Intution - The naive solution is to process all the nodes from the front side of the linked list and keep adding a node to the list. Now we can easily remove the Kth node
+           from the end of the list by simply replacing the next pointer of the ('LENGTH' - 'K' - 1)th node (0-based indexing from start) of the list with the 
+           ('LENGTH' - 'K' + 1)th node. This way we can remove the Kth node from the end of the linked list.
+
+import java.util.ArrayList;
+public class Solution
+{
+    public static Node removeKthNode(Node head, int K)
+    {
+        if (head == null || K == 0) {
+            return head;
+        }
+
+        // It stores all the node of Linked List.
+        ArrayList<Node> nodeList = new ArrayList<>();
+
+        // Creating temporory node.
+        Node temp = head;
+
+        // Iterating the Linked List.
+        while (temp != null) {
+
+            // Add current node to list.
+            nodeList.add(temp);
+
+            temp = temp.next;
+        }
+
+        // If head of Linked List is the Kth node.
+        if (K == nodeList.size()) {
+
+            Node next = head.next;
+            head.next = null;
+            head = next;
+
+        } else {
+
+            // Remove the Kth node from end.
+            nodeList.get(nodeList.size() - K - 1).next = nodeList.get(nodeList.size() - K).next;
+        }
+        return head;
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+By Finding Length of the Linked List (LESS NAIVE APPROACH) -
+
+    Time Complexity: O(N), In the worst case, we will be traversing the whole linked list. Hence, the overall complexity is O(N).
+    Space Compexity: O(1), we are using constant space.
+
+    Where 'N' is the total nodes in Linked List.
+
+Intution - 
+1. Find the length of Linked List 'L'
+2. Check if  'L' = 'K' then remove the head by assigning head to head’s next node.
+3. Else start iterating through the linked list until it comes to ('L' - 'K' -1 )th(0 based indexing from start) node. We will remove the ('L' - 'K')th node by 
+   relinking the next pointer of ('L' - 'K' - 1)th node to the ('L' - 'K' + 1)th node.
+
+public class Solution {
+    public static Node removeKthNode(Node head, int K) {
+
+        if (head == null || K == 0) {
+            return head;
+        }
+
+        // It stores the Length of Linked List.
+        int L = 0;
+
+        // Creating temporory node.
+        Node temp = head;
+
+        while (temp != null) {
+            L++;
+            temp = temp.next;
+        }
+
+        // If head of Linked List is the Kth node from end.
+        if (K == L) {
+
+            Node next = head.next;
+            head.next = null;
+            head = next;
+        } else {
+
+            int countNode = 0;
+            temp = head;
+            while (temp != null) {
+
+                countNode++;
+
+                // Remove the Kth node from end of Linked List.
+                if (L - K == countNode) {
+                    temp.next = temp.next.next;
+                    break;
+                }
+                temp = temp.next;
+            }
+        }
+        return head;
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - Using Slow and Fast Pointers
+
+    Time Complexity: O(N), In the worst case, we will be traversing the whole linked list. Hence, the overall complexity is O(N).
+    Space Compexity: O(1), we are using constant space.
+
+    Where 'N' is the total nodes in Linked List.
+
+Intution - We can remove the required node without finding the length of the given linked list by using two pointers 'SLOW' and 'FAST', which are 'K' nodes apart from each other.
+
+1. Initially, the 'FAST' pointer advances the list by 'K' nodes from the beginning and the 'SLOW' is a pointer to the head of the linked list.
+2. Now both pointers are exactly separated by 'K' distance from each other. We will maintain a constant gap by advancing both pointers together until the 'FAST' pointer reaches the last node.
+3. When the 'FAST' pointer is at the last node then the 'SLOW' pointer will be at ('K' + 1)th node from the end of the linked list.
+4. At last, we will set the next of 'SLOW' pointer to its next of next node.
 
 public class Solution
 {
     public static Node removeKthNode(Node head, int K)
     {
         Node slow = head, fast = head;
+        
+        if (head == null || K == 0) {
+            return head;
+        }
 
+        // fast pointer advances slow by k elements in linked list.
         for(int i = 0; i < K; i++){
             fast = fast.next;
         }
 
+        // fast is null indicating that k is equal to the length of list and we have to delete kth element from end that means we have to delete first element, 
+        // so deleting 1st element means to return head.next. 
         if(fast == null){
             return head.next;
         }
 
+        // Both pointers moves equally together by maintaing a distance of k elements inbetween. 
+        // fast.next != null is the condition used to stop the iteration before the target element so that we can stitch element before target to element after target.
         while(fast.next != null){
             fast = fast.next;
             slow = slow.next;
         }
 
+        // Connect elements before target and after target ( slow pointer is at kth element from start)
         slow.next = slow.next.next;
+
         return head;
     }
 }
