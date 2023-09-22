@@ -1,0 +1,13 @@
+Problem -
+Consider a wedding in which bride side people are holding odd numbers and eople from groom side are holding even numbers. For the game bride side people should come first, 
+then groom side people in same order. The attendees of the wedding with their numbers are given in the form of a singly linked list, arranged randomly.
+
+Example -
+Input: 6 10 7 8 5 -1
+Output: 7 5 6 10 8 -1 ( odds are coming first followed by evens same in the manner as they are in the list without any changes in their relative positions to each other.)
+
+Input: 11 21 31 41 51 -1
+Output: 11 21 31 41 51 -1 (as list is already in the manner we want so no changes were visible in output.)
+
+There are  approaches to solve. Mentioned below.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
