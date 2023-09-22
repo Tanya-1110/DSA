@@ -11,7 +11,7 @@ Output: 11 21 31 41 51 -1 (as list is already in the manner we want so no change
 
 There is 1 approach to solve. Mentioned below.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Iterative Approach - 1
+Iterative Approach -  4 POINTER APPROACH
     Time Complexity: O(N), Every node of list is traversed only once.
     Space Complexity: O(1), constant space is used.
     
@@ -83,7 +83,7 @@ public class Solution {
     }
 }
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Iterative Approach - 2
+Iterative Approach - 2 POINTER APPROACH 
     Time Complexity: O(N), Every node of list is traversed only once.
     Space Complexity: O(1), constant space is used.
     
@@ -138,7 +138,8 @@ Example -
 Input: 6 10 7 8 5 -1
 Output: 6 7 5 10 8 (odd indices values i.e., 6, 7 and 5 are placed ahead and even indices 10, 8 are placed later)
 
-Approach - 1 -  Let Split our linked list into odd even index element list then concat even index element list head to odd index element list tail 
+Approach - 4 POINTER APPROACH 
+Let Split our linked list into odd even index element list then concat even index element list head to odd index element list tail 
 (It is still efficient...beats 100% submission)
 
 Time Complexity : O(n)
@@ -186,7 +187,8 @@ class Solution {
     }
 }
 
-Approach - 2 -  Two Pointer and Constant space by just updating the pointers
+Approach - 2 POINTER APPROACH 
+Two Pointer and Constant space by just updating the pointers
 Time Complexity : O(n)
 Space Complexity : O(1)
 
