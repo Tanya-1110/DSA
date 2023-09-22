@@ -9,5 +9,206 @@ Output: 7 5 6 10 8 -1 ( odds are coming first followed by evens same in the mann
 Input: 11 21 31 41 51 -1
 Output: 11 21 31 41 51 -1 (as list is already in the manner we want so no changes were visible in output.)
 
-There are  approaches to solve. Mentioned below.
+There is 1 approach to solve. Mentioned below.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Iterative Approach - 1
+    Time Complexity: O(N), Every node of list is traversed only once.
+    Space Complexity: O(1), constant space is used.
+    
+    Where 'N' is the number of the nodes in the linked list.
+
+Intution - We will use 4 pointers for even-odd list both at starts and ends to make the odd even segregation in the list. In the last we will connect oddEnd with evenStart 
+           to return head of resultant list.
+
+ALGORITHM -
+1. Initialise four-pointers, ‘ODD_START, ‘ODD_END’, ‘EVEN_START’ and ‘EVEN_END’ by NULL.
+    ‘ODD_START’ : Points to the starting node of the linked list having odd values. 
+    ‘ODD_END’ : Points to the ending node of the linked list having odd values. 
+    ‘EVEN_START’ : Points to the starting node of the linked list having even values. 
+    ‘EVEN_END’ : Points to the ending node of the linked list having even values.
+2. Traverse the original linked list.
+  . If the current node’s value is odd: If ‘ODD_START’ is NULL, the current node will be the new ‘ODD_START’. Else, add the current node to the end of the odd list. 
+    Keep moving ‘ODD_END’.
+  . If the current node’s value is even: If ‘EVEN_START’ is NULL, the current node will be the new ‘EVEN_START’. Else, add the current node to the end of the even list i.e.
+    the current node will become the node after ‘EVEN_END’. Keep moving ‘evenEnd’.
+3. After the end of the loop, the linked list starting from ‘ODD_START’ will contain all the odd valued nodes and the linked list starting from ‘EVEN_START’ will contain 
+   all the even valued nodes.
+4. Add the even list after the odd list by pointing the next of the ‘ODD_END’ to the ‘EVEN_START’.
+5. Return the head of the modified linked list, i.e ‘ODD_START’.
+
+public class Solution {
+
+    public static Node segregateOddEven(Node head) {
+        Node oddStart = null, oddEnd = null, evenStart = null, evenEnd = null;
+
+        Node curr = head;
+
+        while (curr != null) {
+            // If the node is odd, add it to the odd linked list.
+            if (curr.data % 2 == 1) {
+                if (oddStart == null) {
+                    oddStart = curr;
+                    oddEnd = oddStart;
+                } else {
+                    oddEnd.next = curr;
+                    oddEnd = oddEnd.next;
+                }
+            }
+            // If the node is even, add it to the even linked list.
+            else {
+                if (evenStart == null) {
+                    evenStart = curr;
+                    evenEnd = evenStart;
+                } else {
+                    evenEnd.next = curr;
+                    evenEnd = evenEnd.next;
+                }
+            }
+
+            // Update current for the next iteration.
+            curr = curr.next;
+        }
+
+		    // If either odd list or even list is empty, no change is required as all elements are either even or odd.
+        if (oddStart == null || evenStart == null) {
+            return head;
+        }
+
+        // Connect even linked list after odd.
+        oddEnd.next = evenStart;
+        evenEnd.next = null;
+
+        // Return the head of the modified list i.e oddStart.
+        return oddStart;
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Iterative Approach - 2
+    Time Complexity: O(N), Every node of list is traversed only once.
+    Space Complexity: O(1), constant space is used.
+    
+    Where 'N' is the number of the nodes in the linked list.
+
+Intution - We are creating 2 nodes named odd and even with even, odd values (which doesn't matter either we can use -1 value as well), these 2 pointers will create their 
+         list with values as the temp pointer valuse comes even or odd (here temp stores currrnt value of node from head till null) and in the last just connect the 2 lists. 
+
+public class Solution {
+
+    public static Node segregateOddEven(Node head) {
+
+        if(head == null || head.next == null) 
+            return head;
+
+        Node odd = new Node(1);
+        Node even = new Node(2);
+
+        Node temp1 = odd;
+        Node temp2 = even;
+
+        Node temp = head;
+
+        while(temp != null){
+
+            if(temp.data % 2 == 0){
+
+                temp2.next = new Node(temp.data);
+                temp2 = temp2.next;
+
+            }else{
+
+                temp1.next = new Node(temp.data);
+                temp1 = temp1.next;
+
+            }
+
+            temp = temp.next;
+
+        }
+
+        // Connecting even list at the end of odd list. 
+        temp1.next = even.next;
+        return odd.next;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+EXTRA QUESTION - Similar question is on leetcode problem - 328 (question is similar to above one difference is we are separating list on the basis of even odd indices rather than values)
+
+Example - 
+Input: 6 10 7 8 5 -1
+Output: 6 7 5 10 8 (odd indices values i.e., 6, 7 and 5 are placed ahead and even indices 10, 8 are placed later)
+
+Approach - 1 -  Let Split our linked list into odd even index element list then concat even index element list head to odd index element list tail 
+(It is still efficient...beats 100% submission)
+
+Time Complexity : O(n)
+Space Complexity : O(1)
+
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        if(head==null || head.next==null) return head;
+        
+        ListNode oddHead = null, oddTail = null;
+        ListNode evenHead = null, evenTail = null;
+        ListNode curr = head;
+        int i = 1;
+        while(curr!=null){
+			// generate the odd indices list
+            if(i%2==1){
+                if(oddHead==null){
+                    oddHead = curr;
+                    oddTail = curr;
+                }
+                else{
+                    oddTail.next = curr;
+                    oddTail = oddTail.next;
+                }
+            }
+			// generate the even indices list
+            else{
+                if(evenHead==null){
+                    evenHead = curr;
+                    evenTail = curr;
+                }
+                else{
+                    evenTail.next = curr;
+                    evenTail = evenTail.next;
+                }
+            }
+            curr = curr.next;
+            i++;
+        }
+        
+        evenTail.next = null;     // there should not be any node after even tail
+        oddTail.next  = evenHead;   // join even list after odd
+        return oddHead;
+    
+    }
+}
+
+Approach - 2 -  Two Pointer and Constant space by just updating the pointers
+Time Complexity : O(n)
+Space Complexity : O(1)
+
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        
+		if(head==null) return head;
+		
+        ListNode odd = head;
+        ListNode even = head.next;
+        ListNode evenHead = even;
+        
+        while(even!=null && even.next!=null){
+            odd.next = odd.next.next;
+            even.next = even.next.next;
+            odd = odd.next;
+            even = even.next;
+        }
+        
+        odd.next = evenHead;
+        
+        return head;
+    }
+}
+
