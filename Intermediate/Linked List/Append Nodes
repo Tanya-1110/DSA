@@ -17,15 +17,17 @@ Explanation - For the linked list, the value of 'M' is 3. So we skip the first 3
               only two nodes remaining before we encounter the end of the linked list, hence we add those 2 nodes(7->9). The sum is 16, therefore we add 16 to the end of the 
               linked list. Because we have encountered the end of the linked list, the updated linked list is our answer.
 
-There are 2 approaches to solve. Mentioned below.
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-RECURSIVE APPROACH - (NAIVE APPROACH)
-
-INTUTION -
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+There is 1 approach to solve. Mentioned below.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ITERATIVE APPROACH - (OPTIMAL APPROACH)
 
-INTUTION -
+    Time Complexity : O(N), As we are traversing the list till the end.
+    Space Complexity : O(1), Constant space is used.
+
+    Where N denotes the length of linked list.
+
+INTUTION - We are just traversing first 'M' till the elements we want to skip, after that we are traversing next 'N' elements to sum simultaneously creating new node to add 
+           after 'N' elements. We will repeat this process till either we reach last element or null element.
 
 public class Solution {
     public static Node<Integer> addNodes(Node<Integer> head, int n, int m) {
