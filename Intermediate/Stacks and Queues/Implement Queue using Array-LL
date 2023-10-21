@@ -101,7 +101,7 @@ import java.io.*;
 }
 public class Queue {
 
-    Node head; // head is acting front.
+    Node head;      // head is acting as front.
     Node rear;
     int size;
     
