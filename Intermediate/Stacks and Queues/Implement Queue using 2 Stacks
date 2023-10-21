@@ -1,0 +1,162 @@
+Problem -You will be given ‘Q’ queries. You need to implement a queue using two stacks according to those queries. Each query will belong to one of these two types:
+1 ‘X’: Enqueue element ‘X’ into the end of the nth queue. Returns true after the element is enqueued.
+2: Dequeue the element at the front of the nth queue. Returns -1 if the queue is empty, otherwise, returns the dequeued element.
+
+Note: Enqueue means adding an element to the end of the queue, while Dequeue means removing the element from the front of the queue.
+
+Example - 
+Input: 7 (No of Operations)
+1 2 
+1 3 
+2 
+1 4 
+1 6 
+1 7 
+2
+Output:
+True 
+True
+2
+True
+True
+True
+3
+
+There are 2 approaches to solve(with same time complaxity and space complexity for both). Mentioned below.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MAKING THE ENQUEUE OPERATION COSTLY -
+
+  Time complexity: O(N), Push operation: O(N), Since we have to empty the whole elements of ‘STK1’ into ‘STK2’ and back again to ‘STK1’, it takes O(N) time.
+                         Pop operation: O(1), Since we just need to pop the top element of the stack which takes O(1) time. 
+	Space Complexity: O(N), Since we are using two stacks where each stack stores at max ‘N’ elements, so the overall space complexity will be O(N).
+	
+	Where 'N' is the size of the queue.
+
+Intution - In this approach, we make sure that the oldest element added to the queue stays at the top of the stack, the second oldest below it and so on. 
+           To achieve this, we will need two stacks. First stack('STK1') is the main stack being used to store the data, while the second stack('STK2') is to assist 
+           and store data temporarily during various operations.
+
+Following steps will be involved while enqueuing a new element to the queue:
+
+. If the queue is empty(means 'STK1' is empty), directly push the first element onto the stack 'STK1'.
+. If the queue is not empty:
+    . move all the elements present in the first stack('STK1') to the second stack('STK1'), one by one.
+    . Then add the new element to the first stack, then move back all the elements from the second stack back to the first stack.
+. Doing so will always maintain the right order of the elements in the stack, with the 1st data element staying always at the top, with the 2nd data element right 
+  below it and the new data element will be added to the bottom.
+ 
+This makes removing an element from the queue very simple, all we have to do is call the pop() method for stack 'STK1'.
+
+import java.util.*;
+import java.io.*;
+
+class Queue {
+
+    Stack<Integer> stk1, stk2;
+
+    public Queue() {
+        stk1 = new Stack<>();
+        stk2 = new Stack<>();
+    }
+
+    // Enqueues 'X' into the queue. Returns true after enqueuing.
+    public boolean enqueue(int x) {
+
+        while(!stk1.isEmpty()){
+            stk2.push(stk1.pop());
+        }
+
+        stk1.push(x);
+
+        while(!stk2.isEmpty()){
+            stk1.push(stk2.pop());
+        }
+
+        return true;
+
+    }
+
+    // Dequeues top element from queue and returns the top element. Returns -1 if the queue is empty.
+    public int dequeue() {
+
+        if (stk1.isEmpty())
+            return -1;
+
+        return stk1.pop();
+
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MAKING THE DEQUEUE OPERATION COSTLY -
+
+  Time complexity: O(N), Push operation: O(1), Since we are just pushing the element at the top of the stack.
+                         Pop operation: O(N), Since we have to empty the whole elements of 'STK1' into 'STK2'.
+	Space Complexity: O(N), Since we are using two stacks where each stack stores at max ‘N’ elements, so the overall space complexity will be O(N).
+	
+	Where 'N' is the size of the queue.
+
+INTUTION - In this approach, we insert a new element onto the stack 'STK1' simply by calling the push() function, but doing so will push our first element towards 
+           the bottom of the stack, as we insert more elements to the stack. But we want the first element to be removed first. Hence in the dequeue operation, 
+           we will have to use the second stack 'STK2'.
+
+The steps are as follows:
+
+. If the queue is empty(means 'STK1' is empty), then we return an error message saying, the queue is empty.
+. If the queue is not empty:
+    . move all the elements present in the first stack('STK1') to the second stack('STK2'), one by one.
+    . Then remove the element at the top from the second stack, and then move back all the elements from the second stack to the first stack.
+. The purpose of moving all the elements present in the first stack to the second stack is to reverse the order of the elements, because of which the first 
+  element inserted into the queue, is positioned at the top of the second stack, and all we have to do is call the pop() function on the second stack to remove 
+  the element.
+
+import java.util.Stack;
+
+class Queue {
+	private Stack<Integer> stk1, stk2;
+
+	public Queue() {
+		stk1 = new Stack<Integer>();
+		stk2 = new Stack<Integer>();
+	}
+
+	// Enqueues 'X' into the queue. Returns true after enqueuing.
+	public boolean enqueue(int value) {
+		// Simply push the value into the 1st stack.
+		stk1.push(value);
+
+		// Return true as element pushed.
+		return true;
+	}
+	/*
+	   Dequeues top element from queue. Returns -1 if the queue is empty, 
+	   otherwise returns the popped element.
+	*/
+	public int dequeue() {
+		// Check if both the stacks are empty.
+		if (stk1.isEmpty() && stk2.isEmpty()) {
+			// Queue is empty.
+			return -1;
+		}
+
+		// If 2nd stack is empty, move elements from 1st stack to 2nd.
+		if (stk2.isEmpty()) {
+			// Until stack is empty.
+			while (!stk1.isEmpty()) {
+				// Push top element of 1st stack into 2nd stack.
+				stk2.push(stk1.peek());
+
+				// pop out the pushed element.
+				stk1.pop();
+			}
+		}
+
+		// Store the top element of 2nd stack into a variable.
+		int value = stk2.peek();
+
+		// Pop out the elemnt.
+		stk2.pop();
+
+		// Return the popped element.
+		return value;
+	}
+}
