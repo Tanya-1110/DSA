@@ -1,0 +1,91 @@
+Problem - You must implement the Stack data structure using a Singly Linked List. Create a class named 'Stack' which supports the following operations(all in O(1) time):
+1 getSize: Returns an integer. Gets the current size of the stack.
+2 isEmpty: Returns a boolean. Gets whether the stack is empty.
+3 push: Returns nothing. Accepts an integer. Puts that integer at the top of the stack.
+4 pop: Returns nothing. Removes the top element of the stack. It does nothing if the stack is empty.
+5 getTop: Returns an integer. Gets the top element of the stak. Returns -1 if the stack is empty.
+
+Example -
+Input: 4  (No of operations)
+3 5
+3 4
+1
+2
+Output: 
+2
+false    
+
+Input: 4
+3 5
+3 4
+4
+5
+Output: 
+5
+
+There is 1 approach to solve. Mentioned below.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+APPROACH - 
+   Time Complexity - O(1), Since we are inserting and deleting elements from the head of the list itself, constant time is spent on pop and push functions. 
+                           The other functions are also simply returning a value, so they also take constant time.
+
+   Space Complexity - O(N), where ‘N’ is the number of elements pushed in the stack. We can add a maximum of ‘N’ elements in the stack.
+
+INTUTION - We are maintaining a Linked List where on pushing operation a new node is created and this element's next points to current head (Reversed LL) as it will help us in pop operation.
+
+public class Solution {
+
+    static class Stack {
+        
+        Node head;
+        int size;
+        
+        Stack()
+        {
+            head = new Node();
+            size = 0;
+        }
+
+        int getSize()
+        {
+            return size;
+        }
+
+        boolean isEmpty()
+        {
+            return size == 0;
+        }
+
+        void push(int data)
+        {
+            if (head == null) {
+                head.data = data;
+            } else {
+                Node element = new Node(data);
+                element.next = head;
+                head = element;
+            }
+
+            size += 1;
+        }
+
+        void pop()
+        {    
+            if (isEmpty())  return;
+
+            Node temp = head;
+            head = head.next;
+            temp.next = null;
+
+            size -= 1;
+        }
+
+        int getTop()
+        {   
+            if (isEmpty())  
+               return -1;
+
+            return head.data;
+        }
+    }
+}
