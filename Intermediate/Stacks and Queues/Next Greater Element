@@ -1,0 +1,100 @@
+Problem - You are given an array arr of length N. You have to return a list of integers containing the NGE(next greater element) of each element of the given array. 
+          The NGE for an element X is the first greater element on the right side of X in the array. Elements for which no greater element exists, consider the NGE as -1.
+
+Example -
+Input: 4
+1 2 4 3
+Output: 2 4 -1 -1
+
+Input: 4
+9 3 6 5
+Output: -1 6 -1 -1
+
+There are 2 approaches to solve. Mentioned below.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Brute Approach - 
+    Time Complexity : O(N^2), In the worst case, we will be searching for the next greater element of each element. For searching the next greater element in arr 
+                              it can take O(N) time, thus total time would be O(N^2).
+    Space Complexity : O(1), constant space is used.
+    
+    Where N is the length of the array.
+
+INTUTION - 
+1. Initialise an array ans of length N to store the next greater number of arr[i] at index i.
+2. Traverse the given array and for every element at index I
+     . Initialise a variable next to -1.
+     . Run a loop from i+1 to N, and check whether the current element is greater than arr[i] then update the next to the current element and break the loop.
+     . Store next at ans[i].
+3. Return ans array.
+
+public class Solution {
+
+    public static int[] nextGreater(int[] arr, int n) {
+
+        int[] ans = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            int next = -1;
+
+            // Find its next greater element
+            for (int j = i + 1; j < n; j++) {
+                if (arr[i] < arr[j]) {
+                    next = arr[j];
+                    break;
+                }
+            }
+            ans[i] = next;
+        }
+        return ans;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach - Using Stack
+    Time Complexity : O(N), In the worst case, we will be pushing and popping all the elements into the stack only once. Thus complexity would be O(N).
+    Space Complexity : O(N), In the worst case, all the elements can be in the stack.
+    
+    Where N is the length of the array.
+
+INTUTION - 
+1. Initialise an array ans of length N to store the next greater number of arr[i] at index i.
+2. Create a stack of type integer, where we will store the smaller element.
+3. Traverse the array from backwards, because when we will arrive at a certain index its next greater element will be already in the stack and we can easily get 
+   this element by pop operation.
+4. For every element at index I,
+   . We will pop the elements from the stack till we get the greater element on top of the stack from the current element and that element will be the answer for 
+     the current element.
+   . If the stack gets empty while doing the pop operation then the answer would be -1.
+   . Store the next greater element in the array and.
+   . Push the current element of the array into the stack.
+5. Finally, return the array ans.
+
+
+import java.util.Stack;
+
+public class Solution {
+
+    public static int[] nextGreater(int[] arr, int n) { 
+
+        int[] ans = new int[n];
+
+        Stack<Integer> s = new Stack<>();
+
+        for (int i = n - 1; i >= 0; i--) {
+            
+            // We will pop the elements from the stack till we get the greater element Or stack become empty
+            while (!s.isEmpty() && s.peek() <= arr[i]) {
+                s.pop();
+            }
+
+            if (s.isEmpty()) {
+                ans[i] = -1;
+            } 
+            else {
+                ans[i] = s.peek();
+            }
+
+            s.push(arr[i]);
+        }
+        return ans;
+    }
+}
