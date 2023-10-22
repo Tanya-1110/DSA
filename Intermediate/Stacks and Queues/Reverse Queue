@@ -1,0 +1,97 @@
+Problem - You are given a queue of 'N' elements. Your task is to reverse the order of elements present in the queue. You can only use the standard operations of the QUEUE STL.
+1. enqueue(x): Add an item x to the rear of the queue.
+2. dequeue(): Removes an item from the front of the queue.
+3. size(): Returns the number of elements in the queue.
+4. front(): Finds front element.
+5. empty(): Checks whether the queue is empty or not.
+
+Example -
+Input: 5
+10 6 8 12 3
+Output: 3 12 8 6 10
+
+There are 2 approaches to solve. Mentioned below.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+USING ANOTHER QUEUE -
+	Time complexity: O(N^2), In the worst case, we require O(N) operations for each element in the queue. Therefore, to reverse ‘N’ elements, the overall Time Complexity becomes O(N ^ 2).
+	Space Complexity: O(N), extra space O(N) is required by the queue. Hence, the overall Space Complexity is O(N).
+	
+	Where N is the number of elements in the queue. 
+
+INTUTION - 
+. The idea is to use another queue to solve this problem. This queue will be used to store the final result.
+. So, create an empty queue, say result.
+. Now, remove the top element from the given queue.
+. Each time you remove an element, push it back to the same queue.
+. After repeating the previous two steps N-1 times (where N is the size of the queue). The last element of the (given) queue will reach the front of the queue.
+. Dequeue the front element and enqueue it to result .
+. The size of the given queue has now decreased by one and the size of the result queue has increased by one.
+. Repeat the steps until the (given) queue becomes empty.
+. The result queue holds the final answer.
+
+Here, first we are bringing last element to the front end of queue and then we are pushing the front eleemnt to the ans queue and we are doing these 2 steps for all the elements of the queue.
+
+import java.util.Queue;
+import java.util.LinkedList;
+
+public class Solution 
+{
+    public static Queue < Integer > reverseQueue(Queue < Integer > q) 
+    {	
+        // Maintain a queue
+        Queue < Integer > ans = new LinkedList < Integer > ();
+
+        while (!q.isEmpty()) 
+        {
+            int n = q.size();
+
+            // moving the top n-1 elements from front to the end of queue (1 element in 1 iteration) .
+            for (int i = 1; i <= n - 1; i++) 
+            {
+                q.add(q.peek());
+                q.remove();
+            }
+			
+            // Insert the front element of q into ans
+            ans.add(q.peek());
+            q.remove();
+        }
+		
+        // Return the queue containing elements in reverse order
+        return ans;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+USING STACK -
+	Time complexity: O(N), we require N insert and N delete operations in the stack and queue. So, the overall Time Complexity is O(N).
+	Space Complexity: O(N), extra space O(N) is required by the stack. Hence, the overall Space Complexity is O(N).
+	
+	Where N is the number of elements in the queue. 
+
+INTUTION - 
+. Stack is used to reverse the order of elements as it follows LIFO (Last in first out).
+. The idea here is to empty all the elements of the queue into a stack.
+. Now, pop the elements from the stack and insert them back into the queue.
+. The queue now stores the elements in reverse order.
+
+import java.util.* ;
+import java.io.*; 
+
+public class Solution {
+    public static Queue<Integer> reverseQueue(Queue<Integer> q) {
+
+      Stack<Integer> stk = new Stack<>();
+
+      while(!q.isEmpty()){
+        stk.push(q.peek());
+        q.remove();
+      }
+
+      while(!stk.isEmpty()){
+        q.add(stk.peek());
+        stk.pop();
+      }
+
+      return q;
+    }
+}
