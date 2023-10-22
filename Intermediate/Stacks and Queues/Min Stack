@@ -1,0 +1,106 @@
+Problem -Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+1. Push(num): Push the given number in the stack.
+2. Pop: Remove and return the top element from the stack if present, else return -1.
+3. Top: return the top element of the stack if present, else return -1.
+4. getMin: Returns minimum element of the stack if present, else return -1.
+
+Example -
+Input: 5
+1 1
+1 2
+4
+2
+3
+Output: 1 2 1
+
+There is 1 approach to solve. Mentioned below.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Approach -
+    Time Complexity: O(N), All operations are taking O(1) time but pop operation takes O(no of elemnets in stack) time complexity. So O(N).
+    Space Complexity:O(N), We have to store two stacks: “Stack” and “Min”. The size of each of the stacks can be at most N. So each stack will take O(N) space. 
+                           So total space required = O(N)+O(N) = O(N).
+
+    Where 'N' is the no. of operations performed.
+
+Intution - We are updating min value everytime in push operation as the new element comes. And in pop operation, we are trying various cases -
+           1. if the stack is empty, then return -1.
+           2. if the top element is min, then we have to find new min element. 
+               2.a Again if stack becomes empty after this element that means min = -1 as there is no element in the stack to be called for minimum.
+               2.b If there are more than 1 elements in the stack then we have to find min among the rest by comparing all the elements. For this we can compare 
+                   every element with min value and push that element in temporary stack. later on after all comparisons push all elements from temporary stack to
+                   original stack.
+All other functions are very straightforward.
+
+
+import java.util.* ;
+import java.io.*; 
+
+public class Solution {
+
+    static class MinStack {
+
+        Stack<Integer> st;
+        int min;
+
+        // Constructor
+        MinStack() {
+            st = new Stack<>();
+            min = -1;
+        }
+
+        void push(int num) {
+            if(st.isEmpty())
+              min = num;
+
+            st.push(num);
+
+            if(num < min)
+             min = num;
+        }
+
+        int pop() {
+            if(st.isEmpty())
+              return -1;
+
+            if(st.peek() == min){
+                int element = st.pop();
+
+                // If the top element is min and as we are going to remove it there can be 2 cases that it was the only element present and if it is removed min will be -1 and other case will be there are more elements so we will find the minimum among the rest.
+                if(st.isEmpty()){
+                    min = -1;
+                    return element;
+                }
+
+                // As the peek element was min and as it has been removed and stack has more than 0 elements, we have created another stack to catch min value from remaining elements of stack .
+                min = Integer.MAX_VALUE;
+                Stack<Integer> tmp = new Stack<>();
+
+                while(!st.isEmpty()){
+                    int ele = st.pop();
+                    if(ele < min)
+                        min = ele;
+                    tmp.push(ele);    
+                }
+
+                while(!tmp.isEmpty()){
+                    st.push(tmp.pop());
+                }
+                return element;
+            }else{
+                return st.pop();
+            }
+        }
+
+        int top() {
+            if(st.isEmpty())
+              return -1;
+
+            return st.peek();  
+        }
+
+        int getMin() {
+            return min; 
+        }
+    }
+}
+
