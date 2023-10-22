@@ -1,0 +1,60 @@
+Problem - You're given a string 'S' consisting of "{", "}", "(", ")", "[" and "]" . Return true if the given string 'S' is balanced, else return false.
+For Example: 'S' = "{}()". There is always an opening brace before a closing brace i.e. '{' before '}', '(' before '). So the 'S' is Balanced.
+
+Example - 
+Input: [()]{}{[()()]()}
+Output: Balanced
+
+Input: [[}[
+Output: Not Balanced
+
+There is 1 approach to solve. Mentioned below.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+STACK APPROACH -
+  Time Complexity : O(N), The traversal of the string is done only once. Hence, the O(N) time complexity.
+	Space Complexity : O(N), As the maximum stack size reaches the length of the string, thus the O(N) space complexity.
+
+	Where N is the length of the string.
+
+Intution - Make use of the stack. Traverse the string and push the current character in the stack if it is an opening brace. If there is corresponding starting 
+           brace for the current closing brace, then move to the next character of the string and pop the corresponding opening bracket of current closing bracket 
+           from the stack otherwise, return false.
+
+If after complete traversal, if the stack is empty, then the string is balanced else, it is not balanced.
+
+
+class Solution {
+    public boolean isValid(String s) {
+
+        // Create an empty stack to keep track of opening brackets
+        Stack<Character> st = new Stack<>();
+
+        for(char i : s.toCharArray()){
+
+            // If the character is an opening bracket, push it onto the stack
+            if(i == '(' || i == '{' || i == '['){
+                st.push(i);
+            }
+            // If the character is closing brackets 
+            else{
+                 // If the stack is empty, there is no matching opening bracket, so return false
+                if(st.isEmpty()){
+                    return false;
+                }
+
+                 // Otherwise, get the top of the stack and check if it's the matching opening bracket
+                char c = st.peek();
+                if((i == ')' && c == '(') || (i == '}' && c == '{') || (i == ']' && c == '[')){
+                    // If it is, pop the opening bracket from the stack
+                    st.pop();
+                }else{ // Otherwise, the brackets don't match, so return false
+                    return false;
+                }
+            }
+        }
+
+        // If the stack is empty, all opening brackets have been closed, so return true
+        // Otherwise, there are unmatched opening brackets, so return false
+        return st.isEmpty();
+    }
+}
