@@ -1,0 +1,130 @@
+Problem - Ninja has an array/list ‘PRICE’ of size ’N’ where ‘PRICE[i]’ is the price of a Ninja Coin on an ith day in INR, where 0 <= 'i' <= N-1. The span of the Ninja
+          Coin price on an ith day is defined as the maximum number of consecutive days (starting from the ith day and going backward) for which the price of a Ninja 
+          Coin was less than or equal to its price at ith day. Your task is to return an array/list of size ‘N’ where the ith integer is the span of Ninja Coin price on
+          an ith day. 
+
+For Example : Let the price of Ninja Coin for 5 consecutive days is [4, 2, 3, 3, 7]. 
+     
+              The span of Ninja Coin on the 0th day is 1 because we cannot move backward from day 0. 
+              The span of Ninja Coin on the 1st day is 1 because the price on day 0 is 4 which is greater than 2, so the only day 1 is counted.
+              The span of Ninja Coin on the 2nd day is 2 because the price on day 2 and day 1 is less than or equal to 3 and then on day 0 price is 4 which is 
+              greater than 3, so we count day 2 and day 1.
+              The span of Ninja Coin on the 3rd day is 3 because the price on day 3, day 2, and day 1 is less than or equal to 3, and on day 0 price is 4 which is 
+              greater than 3, so we count day 3, day 2, and day 1.
+              The span of Ninja Coin on the 4th day is 5 because its value is higher than all previous days values.
+  
+           Thus you should return an array/list [1, 1, 2, 3, 5].
+
+Example - 
+Input: 3
+1 1 1
+Output: 1 2 3
+
+Input: 7
+100 80 60 70 60 75 85
+Output: 1 1 1 2 1 4 6
+
+There are 2 approaches to solve. Mentioned below.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Brute Approach - 
+    Time Complexity : O(N^2), 2 loops are executed.
+    Space Complexity : O(1), constant space is used.
+
+    where 'N' is the size of array/list 'PRICE'.
+
+Intution - The basic idea is to make an array/list ‘RESULT’ of size ‘N’ and fill it with 0,  then for each ‘i’ (0 <= ‘i’ < ‘N’) we iterate backward from ‘i’, using
+           pointer ‘j’ till PRICE[j] <= PRICE[i] and increment RESULT[i] by 1 for each such ‘j’.
+
+Algorithm:
+1. Make an array/list ‘RESULT’ of size ‘N’ and fill it with 0.
+2. Run a loop where ‘i’ ranges from 0 to ‘N’-1 and do the following -:
+    1. Initialize an integer ‘j’ := ‘i’.
+    2. Run a loop till ‘j’ >= 0 and PRICE[j] <= PRICE[i]:
+        1. Increment ‘RESULT[i]’ by 1,
+        2. Decrement ‘j’ by 1.
+3. Return ‘RESULT’.
+
+
+import java.util.ArrayList;
+
+public class Solution {
+    public static ArrayList<Integer> findSpans(ArrayList<Integer> price) {
+        
+    	int n = price.size();
+
+    	//  Make an array/list 'result' of size 'n' and fill it with 0.
+    	ArrayList<Integer> result = new ArrayList<>();
+    	for(int i=0; i<n; i++) {
+    		result.add(0);
+    	}
+
+    	for(int i = 0; i < n; i++) {
+        	
+        	int j = i;
+        	
+        	//  Find span of Ninja coin on day 'i'.
+	        while(j >= 0 && price.get(j) <= price.get(i)) {
+
+	        	result.set(i, result.get(i)+1);
+	            j -= 1;
+	        }
+    	}
+    	return result;    	
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach -
+    Time Complexity : O(N), Each index will be pushed or pop at most once, from the stack,  Both push and pop operation takes O(1) times in stack. Thus, the 
+                            overall time complexity will be O(N).
+    Space Complexity : O(N), The size of the stack ‘STK’ can go up to ‘N’. Thus overall complexity is O(N).
+
+    where 'N' is the size of array/list 'PRICE'.
+    
+Intution - The basic idea is to use a stack here. We can track all the days before ‘i’ which has a Ninja Coin price higher than its price at day ‘i’ in increasing 
+           order of price from top to bottom.  Using this stack we can find the span at any day ‘i’ in O(1) time.
+
+Algorithm:
+1. Make an array/list ‘RESULT’ of size ‘N’ and fill it with 0.
+2. Create an empty stack ‘STK’.
+3. Run a loop where ‘i’ ranges from 0 to ‘N’-1 and do the following -:
+    1. Run a loop till ‘STK’ is not empty and PRICE[STK.top()] <= PRICE[i] -: Pop-top element from STK.
+    2. If ‘STK’ is empty, then do ‘RESULT[i]’:= i+1, otherwise do RESULT[i] = i - STK.top(),  Where STK.top() is the top element of stack.   
+    3. Push ‘i’ in STK.
+4. Return ‘RESULT’.
+
+
+import java.util.Stack;
+import java.util.ArrayList;
+
+public class Solution {
+    public static ArrayList<Integer> findSpans(ArrayList<Integer> price) {
+      
+    	int n = price.size();
+
+    	//  Make an array/list 'result' of size 'n' and fill it with 0.
+    	ArrayList<Integer> result = new ArrayList<>();
+    	for(int i=0; i<n; i++) {
+    		result.add(0);
+    	}
+
+    	Stack<Integer> stk = new Stack<Integer>();
+
+    	for(int i = 0; i < n; i++) {
+        	
+        	//  Stack will have only those days before 'i' in which price is higher than price at day 'i'.
+        	while(stk.isEmpty() == false && price.get(stk.peek()) <= price.get(i)) {	
+        		stk.pop();
+	        }
+
+	        //  Span on day 'i'.
+	        if(stk.isEmpty() == true) {
+            	result.set(i, i + 1);
+            }
+            else {
+            	result.set(i, i - stk.peek());
+            }
+            stk.push(i);
+        }
+    	return result;    	
+    }
+}          
