@@ -16,91 +16,90 @@ Output: 1 2 1
 There is 1 approach to solve. Mentioned below.
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Approach -
-    Time Complexity: O(N), All operations are taking O(1) time but pop operation takes O(no of elemnets in stack) time complexity. So O(N).
+    Time Complexity: O(N), All of our operations are doing some constant no. of operations and taking O(1). For each of the operations, we will take O(1) time. 
+                           Hence the final time complexity will be O(N) for N operations.
     Space Complexity:O(N), We have to store two stacks: “Stack” and “Min”. The size of each of the stacks can be at most N. So each stack will take O(N) space. 
                            So total space required = O(N)+O(N) = O(N).
 
     Where 'N' is the no. of operations performed.
 
-Intution - We are updating min value everytime in push operation as the new element comes. And in pop operation, we are trying various cases -
-           1. if the stack is empty, then return -1.
-           2. if the top element is min, then we have to find new min element. 
-               2.a Again if stack becomes empty after this element that means min = -1 as there is no element in the stack to be called for minimum.
-               2.b If there are more than 1 elements in the stack then we have to find min among the rest by comparing all the elements. For this we can compare 
-                   every element with min value and push that element in temporary stack. later on after all comparisons push all elements from temporary stack to
-                   original stack.
-All other functions are very straightforward.
+Intution - The basic idea is to store two stacks. One for regular stack and one for storing prefix minimums of our regular stack. We store values at which our 
+           minimum changes so that those values are stored and can be accessed later when we pop elements on top of it. We just return the top value of Min stack 
+           whenever we are asked getMin(). The implementation details are depicted in the following algorithm.
+
+Algorithm: 
+
+1. push(num)
+
+. Push num into the regular stack
+. If Min stack is empty OR num ≤ top of Min stack - Push num into Min stack
+ 
+2. pop()
+
+. If Min stack is not empty AND top of Min stack = top of the regular stack - Pop top element of Min stack
+. If the regular stack is empty, return -1.
+. pop the element of the regular stack.
+ 
+3. top()
+
+. If the regular stack is empty - return -1.
+. else return peek element of the regular stack.
+
+4. getMin()
+
+. If the min stack is empty, return -1.
+. else return peek element of min stack.
 
 
-import java.util.* ;
-import java.io.*; 
+import java.util.Stack;
 
 public class Solution {
 
     static class MinStack {
 
-        Stack<Integer> st;
-        int min;
+        Stack<Integer> stack, Min;
 
         // Constructor
         MinStack() {
-            st = new Stack<>();
-            min = -1;
+            stack = new Stack<Integer>();
+            Min = new Stack<Integer>();
         }
 
         void push(int num) {
-            if(st.isEmpty())
-              min = num;
-
-            st.push(num);
-
-            if(num < min)
-             min = num;
-        }
-
-        int pop() {
-            if(st.isEmpty())
-              return -1;
-
-            if(st.peek() == min){
-                int element = st.pop();
-
-                // If the top element is min and as we are going to remove it there can be 2 cases that it was the only element present and if it is removed min will be -1 and other case will be there are more elements so we will find the minimum among the rest.
-                if(st.isEmpty()){
-                    min = -1;
-                    return element;
-                }
-
-                // As the peek element was min and as it has been removed and stack has more than 0 elements, we have created another stack to catch min value from remaining elements of stack .
-                min = Integer.MAX_VALUE;
-                Stack<Integer> tmp = new Stack<>();
-
-                while(!st.isEmpty()){
-                    int ele = st.pop();
-                    if(ele < min)
-                        min = ele;
-                    tmp.push(ele);    
-                }
-
-                while(!tmp.isEmpty()){
-                    st.push(tmp.pop());
-                }
-                return element;
-            }else{
-                return st.pop();
+            stack.push(num);
+            if (Min.isEmpty() || Min.peek() >= num) {
+                Min.push(num);
             }
         }
 
-        int top() {
-            if(st.isEmpty())
-              return -1;
+        int pop() {
+            if (!Min.isEmpty() && Min.peek() == stack.peek()) 
+                Min.pop();
 
-            return st.peek();  
+            if (stack.isEmpty()) 
+                return -1; 
+            
+            return stack.pop();
+        }
+
+        int top() {
+            if (stack.isEmpty()) 
+                return -1;
+            
+            return stack.peek();
         }
 
         int getMin() {
-            return min; 
+            if (Min.isEmpty()) 
+                return -1;
+            
+            return Min.peek();
         }
     }
 }
+
+
+        
+
+             
 
