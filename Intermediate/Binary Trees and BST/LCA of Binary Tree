@@ -1,1 +1,69 @@
 Problem - 
+You have been given a Binary Tree of distinct integers and two nodes ‘X’ and ‘Y’. You are supposed to return the LCA (Lowest Common Ancestor) of ‘X’ and ‘Y’. The LCA 
+of ‘X’ and ‘Y’ in the binary tree is the shared ancestor of ‘X’ and ‘Y’ that is located farthest from the root(where we allow a node to be a descendant of itself).
+
+Note : You may assume that given ‘X’ and ‘Y’ definitely exist in the given binary tree.
+
+Example -
+Input: 1 2 3 4 7 -1 -1 -1 -1 -1 -1
+4 7
+Output: 2
+
+There is 1 approach to solve.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Time - O(N), Where N is the number of nodes in the given binary tree. Since we are doing two pre-order traversals and in the worst case (Skewed Trees), all nodes of
+             the given tree can be present in the path when ‘X’ and ‘Y’ are very close to the leaf node of the binary tree. And each one can take O(N) time. So the 
+             overall time complexity will be O(N).
+
+Space - O(N), Since we are storing the paths in a list and in the worst case (Skewed Trees), all nodes of the given tree can be present in the list when ‘X’ will be
+              the root node and ‘Y’ will be the leaf node of the binary tree. So the overall space complexity will be O(N).
+
+/************************************************************
+
+ Following is the TreeNode class structure
+
+ class TreeNode<T>
+ {
+     T data;
+     TreeNode<T> left;
+     TreeNode<T> right;
+
+     TreeNode(T data)
+     {
+         this.data = data;
+         left = null;
+         right = null;
+     }
+ };
+
+ ************************************************************/
+
+public class Solution {
+   public static TreeNode<Integer> lca(TreeNode<Integer> root,int x,int y){
+
+        // base case
+        if(root == null) 
+            return null;
+        if(root.data == x || root.data == y) 
+            return root;
+
+        //recursive calls to the left and right as well
+        TreeNode<Integer> left = lca(root.left, x, y);
+        TreeNode<Integer> right = lca(root.right, x, y);
+
+        // checking conditions
+        if(left != null && right != null) 
+            return root;
+        else if(left != null) 
+            return left;
+        else  
+            return right;
+    }
+
+    public static int lowestCommonAncestor(TreeNode<Integer> root, int x, int y) {
+        TreeNode<Integer>ans = lca(root,x,y);
+        if(ans == null) 
+           return 0;
+        return ans.data;
+    }
+}
