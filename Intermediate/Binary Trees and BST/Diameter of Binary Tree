@@ -9,6 +9,92 @@ Output: 3
 Input: 1 2 3 -1 -1 -1 -1
 Output: 2
 
-There 
+There are 2 approaches to solve. Mentioned below.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Naive Approach -
+Time - O(N^2), ( For every node, Height Function is called which takes O(N) time hence for every node it becomes N*N ) 
+Space - O(1) ( Extra Space ) + O(H) ( Recursive Stack Space where “H” is the height of tree )
 
+Intution - The idea is to consider every node as a Curving Point in diameter. For our understanding, we can define the curving point as the node on the diameter 
+           path which has the maximum height. Now, if we observe carefully, we can see that diameter of the tree can be defined as left subtree height + right 
+           subtree height from the Curving Point.
+
+                              Diameter at given Curving Point = Left Height + Right Height 
+
+Approach : 
+
+1. Traverse the tree recursively.
+2. At every node, calculate height of left and right subtrees.
+3. Calculate the diameter for every node using the above formula.
+4. Calculate the maximum of all diameters. This can be done simply using a variable passed by reference in the recursive calls or a global static variable.
+                    
+
+class Solution {
+    public int diameterOfBinaryTree(TreeNode root) {
+        if(root == null){
+            return 0;
+        }
+        
+        int ldiameter = diameterOfBinaryTree(root.left);
+        int rdiameter = diameterOfBinaryTree(root.right);
+        
+        int lheight = height(root.left); 
+        int rheight = height(root.right);
+
+        int selfdiameter = lheight + rheight;
+        
+        return Math.max(selfdiameter, Math.max(rdiameter,ldiameter));
+    }
+    
+    public static int height(TreeNode root){
+        if(root == null){
+            return 0;
+        }
+        int lheight = height(root.left);
+        int rheight = height(root.right);
+        return Math.max(lheight,rheight)+1;
+        
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Optimal Approach (POST ORDER TRAVERSAL) -
+
+Time - O(N), N is number of nodes in the binary tree.
+Space - O(1) Extra Space + O(H) Recursion Stack space (Where “H”  is the height of binary tree )  
+
+Intution - So, the idea is to use post-order traversal and keep calculating the height of the left and right subtrees. Once we have the heights at the current node,
+           we can easily calculate both the diameter and height of the current node.
+
+Approach : 
+
+1. Start traversing the tree recursively and do work in Post Order.
+2. In the Post Order of every node , calculate diameter and height of the current node.
+3. If current diameter is maximum then update the variable used to store the maximum diameter.
+4. Return height of current node to the previous recursive call.
+
+Note - We have used array of size 1 to store the diameter as in java, everything is passed by value so we have use either global variable(which is not safe as in multithreading global variable will be accessible to everyone for changes) or an array.
+In array, array's reference is passed by value, so the changes made will be reflected in the original array, So array is passed by value but it's reference is passed by value and Passing a reference by value is not the same as pass by reference. 
+
+
+public class Solution {
+    public int diameterOfBinaryTree(TreeNode root) {
+
+        int[] diameter = new int[1];
+        height(root, diameter);
+        return diameter[0];        
+
+    }
+
+    private int height(TreeNode node, int[] diameter) {
+        if (node == null) {
+            return 0;
+        }
+
+        int lh = height(node.left, diameter);
+        int rh = height(node.right, diameter);
+
+        diameter[0] = Math.max(diameter[0], lh + rh);
+        
+        return 1 + Math.max(lh, rh);
+    }
+}
