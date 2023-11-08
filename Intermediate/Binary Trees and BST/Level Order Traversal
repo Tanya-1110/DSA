@@ -1,0 +1,72 @@
+Problem - You have been given a Binary Tree of integers. You are supposed to return the level order traversal of the given tree.
+
+Example - 
+Input: 1 2 3 4 -1 5 6 -1 7 -1 -1 -1 -1 -1 -1
+Output: 1 2 3 4 5 6 7
+
+Input: 2 7 5 2 6 -1 9 -1 -1 5 11 4 -1 -1 -1 -1 -1 -1 -1
+Output: 2 7 5 2 6 9 5 11 4
+
+There is 1 approach to solve.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Time -  O(N), where ‘N’ is the number of nodes in the given binary tree. We are using the level order traversal, in which there will be ‘N’ push and ‘N’ pop 
+              operations, where push and pop operation will take constant time for the queue data structure. So overall time complexity will be O(N).
+Space - O(N), where ‘N’ is the number of nodes in the given binary tree. We are storing all the nodes for returning the answer; thus, the answer will be the size of
+             ‘N’, and also, we are using the level order traversal. So in the worst case, when the given binary tree will be the balanced binary tree, then the 
+              total number of nodes at the bottom level of the tree will be ((N/2)+1). So at the bottom level size of the queue will be the order of O(N). 
+              So overall space complexity will be O(N).
+
+Intution - In the level order traversal, we will be using queue data structure which has the property FIRST IN FIRST OUT that’s why which nodes come first in current 
+           level the children of that node will also come first for the next level. So, we visit all the nodes one by one of the current level and push into the queue
+           so that when we will be complete with the current level, then we can start exploring nodes of the next level from the queue. We will keep doing until our 
+           queue does not become empty and store all the nodes into “output”. Steps are as follows:
+
+import java.util.* ;
+import java.io.*; 
+/*
+
+	Following is the structure used to represent the Binary Tree Node
+
+	class BinaryTreeNode<T> {
+		T val;
+		BinaryTreeNode<T> left;
+		BinaryTreeNode<T> right;
+
+		public BinaryTreeNode(T val) {
+			this.val = val;
+			this.left = null;
+			this.right = null;
+		}
+	}
+
+*/
+
+import java.util.ArrayList;
+public class Solution {
+    public static ArrayList<Integer> getLevelOrder(BinaryTreeNode root) {
+
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        if (root == null) {
+            return ans;
+        }
+
+        Queue<BinaryTreeNode> que = new LinkedList<>();
+        que.add(root);
+
+        while(!que.isEmpty()){
+
+            BinaryTreeNode temp = que.poll();
+            ans.add(temp.val);
+
+            if(temp.left != null){
+                que.add(temp.left);
+            }
+
+            if(temp.right != null){
+                que.add(temp.right);
+            }
+        }
+        return ans;
+    }
+}
