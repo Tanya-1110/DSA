@@ -1,0 +1,152 @@
+Problem - You have been given a Binary Tree of 'N' nodes, where the nodes have integer values. Your task is to print the zigzag traversal of the given tree.
+Note: In zigzag order, level 1 is printed from left to right fashion, level 2 is printed from right to left. and level 3 is printed from left to right again, and so on…..
+
+Example - 
+Input: 1 2 3 -1 -1 -1  6 -1 -1
+Output: 1 3 2 6
+
+Input: 1 2 4 5 3 -1 -1 -1 -1 -1 -1
+Output: 1 4 2 5 3
+
+There are 2 approaches to solve.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TWO STACK APPROACH 
+
+Time - O(N), where N is the total number of nodes in the given binary tree. In the worst case, we are visiting each node exactly once. Hence the overall time 
+             complexity will be O(N).
+Space - O(N), where N is the total number of nodes in the given binary tree. In the worst case, we are using a two stack which requires additional O(N) space. 
+              So the overall space complexity is O(N).
+
+Intution - The idea here is to use two stacks, one to store odd levels and the other to store even level nodes. We will pop all nodes from the odd level stack and 
+           add children’s of a popped node from left to right to even level stack. Then we will pop all nodes from the even level stack and add their children 
+           from right to left in the odd level stack. As stack works last in first out order so we will put children in reverse order so that we can get original 
+           order.
+
+import java.util.List;
+import java.util.Stack;
+import java.util.ArrayList;
+
+public class Solution {
+	public static List<Integer> zigZagTraversal(BinaryTreeNode<Integer> root) {
+
+		// Declare an empty array answer to store zigzag traversal
+		List<Integer> answer = new ArrayList<>();
+
+		// Base case
+		if (root == null) {
+			return answer;
+		}
+
+		// Declare two empty stacks for odd level and even level
+		Stack<BinaryTreeNode<Integer>> oddLevel = new Stack<>();
+		Stack<BinaryTreeNode<Integer>> evenLevel = new Stack<>();
+
+		// Push root to odd level
+		oddLevel.push(root);
+
+		// Run a loop until both stacks are not empty
+		while (evenLevel.isEmpty() == false || oddLevel.isEmpty() == false) {
+
+			// Pop nodes from odd level and push it into even level
+			while (oddLevel.isEmpty() == false) {
+
+				// Pop the top node odd level
+				BinaryTreeNode<Integer> topNode = oddLevel.pop();
+
+				// Add data of popped node to the answer
+				answer.add(topNode.data);
+
+				// Push left and right child of popped node to
+				// Even level stack
+				if (topNode.left != null) {
+					evenLevel.push(topNode.left);
+				}
+				if (topNode.right != null) {
+
+					evenLevel.push(topNode.right);
+				}
+			}
+
+			// Pop nodes from even level and push it into odd level
+			while (evenLevel.isEmpty() == false) {
+
+				// Pop the top node even level
+				BinaryTreeNode<Integer> topNode = evenLevel.pop();
+
+				// Add data of popped node to the answer
+				answer.add(topNode.data);
+
+				// Push right and left child of popped node to
+				// odd level stack
+				if (topNode.right != null) {
+					oddLevel.push(topNode.right);
+				}
+				if (topNode.left != null) {
+					oddLevel.push(topNode.left);
+				}
+			}
+		}
+
+		// Return the answer
+		return answer;
+	}
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+QUEUE APPROACH (OPTIMAL APPROACH)
+
+Time - O(N), where N is the total number of nodes in the given binary tree. In the worst case, we are visiting each node exactly once.Hence the overall time 
+             complexity will be O(N).
+Space - O(N), where N is the total number of nodes in the given binary tree. In the worst case, we are using a queue that requires additional O(N) space. 
+              So the overall space complexity will be O(N).
+
+Intution - The idea here is to use a breadth-first search i.e. BFS along with the queue. We use an array to store nodes in current level if the level is even then 
+           we will add elements of the array in reverse order otherwise we will add elements of the array in the same order. 
+
+import java.util.* ;
+import java.io.*;
+
+public class Solution {
+	public static List<Integer> zigZagTraversal(BinaryTreeNode<Integer> root) {
+
+		List<Integer> ans = new ArrayList<>();
+		if(root == null) {
+			return ans;
+		}
+
+		Queue<BinaryTreeNode<Integer>> q = new LinkedList<>();
+		q.add(root);
+
+		boolean flag = true;
+
+		while(!q.isEmpty()) {
+
+			int size = q.size();
+			ArrayList<Integer> temp = new ArrayList<>();
+
+			for(int i=0;i<size;i++) {
+				BinaryTreeNode<Integer> front = q.poll();
+				temp.add(front.data);
+
+				if(front.left != null) {
+					q.add(front.left);
+				}
+
+				if(front.right != null) {
+					q.add(front.right);
+				}
+
+			}
+
+			if(flag == false) {
+				Collections.reverse(temp);
+			}
+
+			for(int i=0;i<temp.size();i++) {
+				ans.add(temp.get(i));
+			}
+
+			flag = !flag;
+		}
+		return ans;
+	}
+}
