@@ -1,0 +1,173 @@
+Problem - You are given a Binary Tree of 'n' nodes. The Top view of the binary tree is the set of nodes visible when we see the tree from the top. Find the top view of
+          the given binary tree, from left to right.
+
+Example - 
+Input: 1 2 3 4 5 -1 6 -1 7 -1 -1 8 -1 9 -1 -1 11 10 -1 -1 -1 -1 -1
+Output: 10 4 2 1 3 6
+
+Input: 1 2 3 4 5 6 7 8 9 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+Output: 8 4 2 1 3 7
+
+There are 2 approaches to solve.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Pre - Order Traversal
+
+Time Complexity - O(n * log(n)), Where 'n' is the number of nodes in the given binary tree. Since we are traversing at every node and storing the horizontal 
+                                 distance of every node into Map, inserting an element into the map will take O(log n) time. In the worst case (Skewed Trees), there
+                                 will be 'n' distinct horizontal distance, so it will take O(n * log(n)). While for the 'n' element, push and pop operation take 
+                                 O(1) time for the queue and also inserting and searching into the list take O(1) time. So overall time complexity will be 
+                                 O(n * log(n)).
+
+Space Complexity - O(n), Where 'n' is the number of nodes in the given binary tree. Since we are storing the top view of the tree, so in the worst case (Skewed 
+                         Trees), all nodes of the given tree will be the top view elements so, there will be 'n' distinct horizontal distance to be stored and also 
+                         in that case stack size for recursion will be O(n). So overall space complexity will be O(n).
+
+Intution - As we know that all three traversals, i.e. pre-order, in-order and post-order, visit the tree node at once. We can use any of them. Here we are going to 
+           use pre-order traversal for the explanation. So while traversing in the pre-order traversal, we will keep track of horizontal distance of the node which 
+           is going to be visited from the root node, and we also keep track of the vertical level of that node (where the vertical level of root node would be ‘0’ 
+           and its children would be ‘1’ and so on.... ). We will be using the Map which stores the horizontal distance of the node from the root as the key and 
+           value in the map maintains a pair of containing the value of the node and the level of the node. 
+
+The steps are as follows:
+
+1. Make a Map like:
+map <int, pair<int, int> > visited, where the key of ‘visited’ defines the horizontal distance and value in the map maintains a pair of containing the value of the
+node and the level of the node.
+
+2. And now call preOrder function. Here, ‘hDistance’ defines the horizontal distance and level defines the depth of the tree.
+applyPreorder(root , hDistance, level,visited) = { applyPreorder(root->left , hDistance-1, level+1,visited) , applyPreorder(root->right , hDistance+1, level+1,visited )}
+
+3. For every ‘hDistance’ check whether it is visited or not? If it is not visited, then make it visited with the value of node and ‘level’ and if it is already 
+visited, then check if the previous stored ‘level’ is greater than then the current level. If yes, then store the current node because the previous node now is 
+hidden by the current node because the current node has a lesser height.
+
+4. Once we are done with pre-order, our map contains ‘hDistance’ as the key and value corresponding to each ‘hDistance’ stores the pair of nodes and their level 
+that are visible from the top of the tree at that ‘hDistance’. So iterate over the map and store the value of the node in array/list. Let’s say ‘topView’.
+
+5. Return the ‘topView’.
+
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
+class Pair {
+    int data;
+    int level;
+
+    Pair() {
+    }
+
+    Pair(int data, int level) {
+        this.data = data;
+        this.level = level;
+    }
+}
+
+public class Solution {
+    public static void applyPreOrder(TreeNode root, int hDistance, int level, HashMap<Integer, Pair> visited) {
+        // Base Case.
+        if (root == null) {
+            return;
+        }
+
+        // Check whether the current horizontal distance is already visited or not?
+        // If visited then is previous visited element has greater level.
+        if (!visited.containsKey(hDistance) || visited.get(hDistance).level > level) {
+            visited.put(hDistance, new Pair(root.data, level));
+        }
+
+        // Go for left subtree with one less horizontal distance and one more level.
+        applyPreOrder(root.left, hDistance - 1, level + 1, visited);
+
+        // Go for right subtree with one more horizontal distance and one more level.
+        applyPreOrder(root.right, hDistance + 1, level + 1, visited);
+    }
+
+    public static List<Integer> getTopView(TreeNode root) {
+        // To store horizontal distance as a key and pair of node's value and it's level as the value.
+        HashMap<Integer, Pair> visited = new HashMap<>();
+
+        // Apply pre-order with 0 horizontal distance and 0 levels for root.
+        applyPreOrder(root, 0, 0, visited);
+
+
+
+        // Get the top view of the tree.
+        List<Integer> topView = new ArrayList<>();
+        for (int key : visited.keySet()) {
+            topView.add(key);
+        }
+        // Sorting Keys according to the level Example (-2,-1,0,1,2).
+        Collections.sort(topView);
+
+        // Creating a ArrayList to store the answer sequence of nodes.
+        List<Integer> ans = new ArrayList<>();
+        for (int i : topView) {
+            ans.add((int)visited.get(i).data);
+        }
+        // Return the answer sequence of nodes.
+        return ans;
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Level - Order Traversal
+
+Time - O(N), N is number of nodes of binary tree. Queue will store all the elements of tree to process the traversal. 
+Space - O(N), we have used a map and a queue which fills upto N nodes. So, N + N = 2N. So O(N) is the space complexity. 
+
+Intution - First we have to make a queue of pair which have nodes and their respective +ve and -ve indexes.
+Then we need a map data structure to store the lines and the nodes. This map will store the data in the form of sorted orders of keys(Lines).
+Here we will follow the level order traversal.
+Traverse through the nodes starting with root,0 and store them to the queue.
+Until the queue is not empty, store the node  and line no. in 2 separate variable .
+Then check if that line is present in the map or not
+If not present then store the line and the node->val to the map
+Otherwise store the node->left and node->right along with there line nos. to the queue.
+Then print the node->val from the map
+
+
+class Pair{
+   int hd;    // horizontal distance
+   Node root;
+   Pair(int dat, Node node){
+     this.hd = dat;
+     this.root = node;
+   }
+}
+
+class Solution
+{
+    //Function to return a list of nodes visible from the top view 
+    //from left to right in Binary Tree.
+    static ArrayList<Integer> topView(Node root)
+    {
+        ArrayList<Integer> ans = new ArrayList<>(); 
+        if(root == null) 
+            return ans;
+        Map<Integer, Integer> map = new TreeMap<>();
+        Queue<Pair> q = new LinkedList<Pair>();
+        q.add(new Pair(root, 0)); 
+        while(!q.isEmpty()) {
+            Pair it = q.remove();
+            int hd = it.hd; 
+            Node temp = it.node; 
+            if(map.get(hd) == null) map.put(hd, temp.data); 
+            if(temp.left != null) {
+                
+                q.add(new Pair(temp.left, hd - 1)); 
+            }
+            if(temp.right != null) {
+                
+                q.add(new Pair(temp.right, hd + 1)); 
+            }
+        }
+    
+        for (Map.Entry<Integer,Integer> entry : map.entrySet()) {
+            ans.add(entry.getValue()); 
+        }
+        return ans; 
+        
+    }
+}
