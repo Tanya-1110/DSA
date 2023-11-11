@@ -47,13 +47,13 @@ public class Solution {
         }
 
         // Get root node value from preorder sequence.
-        int rootNode = preorder[pIndex[0]];
+        int rootValue = preorder[pIndex[0]];
 
         // Increment the index denoting the first element of preorder traversal.
         pIndex[0] = pIndex[0] + 1;
 
         // Create the root node with "rootNode" value.
-        TreeNode root = new TreeNode(rootNode);
+        TreeNode root = new TreeNode(rootValue);
 
         if (inStart == inEnd) {
             // There is a single node in the given subtree.
@@ -64,7 +64,7 @@ public class Solution {
             int inIndex = -1;
 
             for (int i = inStart; i <= inEnd; i++) {
-                if (rootNode == inorder[i]) {
+                if (rootValue == inorder[i]) {
                     // Root node value found.
                     inIndex = i;
                     break;
@@ -119,13 +119,13 @@ public class Solution {
         }
 
         // Get root node value from preorder sequence.
-        int rootNode = preorder[pIndex[0]];
+        int rootValue = preorder[pIndex[0]];
 
         // Increment the index denoting the first element of preorder traversal.
         pIndex[0] = pIndex[0] + 1;
 
         // Create the root node with "rootNode" value.
-        TreeNode root = new TreeNode(rootNode);
+        TreeNode root = new TreeNode(rootValue);
 
         if (inStart == inEnd) {
             // There is a single node in the given subtree.
