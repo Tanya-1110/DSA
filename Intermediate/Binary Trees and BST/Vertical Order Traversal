@@ -1,0 +1,96 @@
+Problem - Given a binary tree, return the vertical order traversal of the values of the nodes of the given tree. For each node at position (X, Y), (X-1, Y-1) will be 
+          its left child position while (X+1, Y-1) will be the right child position. Running a vertical line from X = -infinity to X = +infinity, now whenever this
+          vertical line touches some nodes, we need to add those values of the nodes in order starting from top to bottom with the decreasing ‘Y’ coordinates.
+
+Note: If two nodes have the same position, then the value of the node that is added first will be the value that is on the left side.
+
+Example -
+Input:
+Output:
+
+Input:
+Output:
+
+1 - Naive Iterative Approach 
+I was not able to understand 1 - efficient Approach on Code Studio and striver solution on vertical level order traversal.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Iterative Approach
+
+Time - O(NlogN), where N is number of nodes in Binary Tree. While traversing, we visit each node of the given binary tree which results in order of N. And note that
+                  the above implementation uses the map which takes O(logN) complexity for its implementation. So the overall time complexity will be O(N*logN).
+Space - O(N), We are storing all the nodes for returning the answer; thus, the answer will be the size of N, and also, we are using the level order traversal. So in
+              the worst case, when the given binary tree will be the balanced binary tree, then the total number of nodes at the bottom level of the tree will be 
+              ((N/2)+1). So at the bottom level size of the queue will be the order of O(N). So overall space complexity will be O(N).
+
+Intution - Our very basic intuition is that while traversing the given binary tree, we need to keep a track of the horizontal distance of all the nodes of the given
+           binary tree with respect to the root node. We initially pass the horizontal distance as 0 for root. For the left subtree, we pass the ‘HD’ as the 
+           Horizontal distance of root minus 1. For the right subtree, we pass the ‘HD’ as Horizontal Distance of root plus 1. For every Horizontal distance value, 
+           we maintain a list of nodes into the Map. Whenever we see a node in traversal, we go to the Map entry and add the node into the Map using Horizontal 
+           distance as the key in the Map.
+
+Steps are as follows:
+
+1. We maintain a Map for the branch of each node.
+2. Start traversing of the given binary tree in the level order traversal.
+3. In the level order traversal,
+4. Maintain a queue which holds a node of the given binary tree and its corresponding vertical branch.
+5. While iterating the queue until it is not empty we first pop from the queue.
+6. Add the current node’s value in the list/array corresponding to its branch into the Map.
+7. If the current node has the left child, insert it in the queue, pass horizontal distance as ‘HD’ - 1.
+8. If the current node has the right child, insert it in the queue, pass horizontal distance as ‘HD’ + 1.
+
+
+
+import java.util.ArrayList;
+
+public class Solution {
+     static class Pair{
+        int hd;
+        TreeNode node;
+
+        public Pair(int hd, TreeNode node){
+            this.hd = hd;
+            this.node = node;
+        }
+    }
+
+    public static ArrayList<Integer> verticalOrderTraversal(TreeNode<Integer> root) {
+        Queue<Pair> q = new ArrayDeque<>();
+
+        Map<Integer, ArrayList<Integer>> map = new TreeMap<>();
+        q.add(new Pair(0, root));
+
+        while(!q.isEmpty()){
+
+            Pair cur = q.poll();
+            TreeNode<Integer> node = cur.node;
+
+            if(map.containsKey(cur.hd)){
+                map.get(cur.hd).add(node.data);
+
+            }else{
+
+                ArrayList<Integer> temp = new ArrayList<>();
+                temp.add(node.data);
+                map.put(cur.hd, temp);
+            }
+
+            // normal level order traversal
+
+            if(cur.node.left != null){
+                q.add(new Pair(cur.hd - 1, cur.node.left));
+            }
+
+            if(cur.node.right != null){
+                q.add(new Pair(cur.hd + 1, cur.node.right));
+            }
+        }
+
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        for(Map.Entry<Integer, ArrayList<Integer>> entry : map.entrySet()){
+            ans.addAll(entry.getValue());
+        }
+        return ans;
+    }
+}
