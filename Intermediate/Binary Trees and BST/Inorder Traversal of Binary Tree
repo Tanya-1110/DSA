@@ -1,0 +1,139 @@
+Problem - You have been given a Binary Tree of 'n' nodes, where the nodes have integer values. Your task is to return the In-Order traversal of the given binary tree.
+
+Example - 
+Input: 1 2 3 -1 -1 -1  6 -1 -1
+Output: 2 1 3 6
+
+Input: 1 2 4 5 3 -1 -1 -1 -1 -1 -1
+Output: 5 2 3 1 4
+
+No. of Approaches - 3
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Recursive Approach 
+Time - O(N), N is number of nodes in binary tree.
+Space - O(N), O(1) for program execution and O(N) as an auxillary space as a tack is used to store all N elements.
+
+Intution - As we can see, before processing any node, the left subtree is processed first, followed by the node, and the right subtree is processed at last. These 
+           operations can be defined recursively for each node. The recursive implementation is referred to as a Depth-first search (DFS), as the search tree is 
+           deepened as much as possible on each child before going to the next sibling.
+
+
+/*
+    Following is the TreeNode class structure:
+
+    public class TreeNode {
+        int data;
+        TreeNode left;
+        TreeNode right;
+        TreeNode() {
+            this.data = 0;
+            this.left = null;
+            this.right = null;
+        }
+        TreeNode(int val) {
+            this.data = val;
+            this.left = null;
+            this.right = null;
+        }
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.data = val;
+            this.left = left;
+            this.right = right;
+        }
+    };
+*/
+
+import java.util.*;
+
+public class Solution {
+    private static void inorder(TreeNode root,List<Integer> ans){
+        //inorder left -> root -> right
+
+        if(root == null){
+            return;
+        }
+
+        inorder(root.left,ans);
+        ans.add(root.data);
+        inorder(root.right,ans);
+    }
+
+    public static List< Integer > getInOrderTraversal(TreeNode root) {
+
+       List<Integer> ans= new ArrayList<>();
+       inorder(root,ans);
+       return ans;
+
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Iterative Approach - Inorder Traversal using Stack
+Time - O(N), Every node is visited once.
+Space - O(N), in a sekwed tree all the elements will be stored in the stack. So, space will become O(N) for stack will store all n elements.
+
+Intution - To convert the above recursive procedure into an iterative one, we need an explicit stack.
+
+The steps are as follows :
+1. Create an empty stack and initialize the current node as root.
+2. Run a loop until ‘CURRENT’ != NULL or stack is not empty:
+    . Push current node to stack and do ‘CURRENT’ = ‘CURRENT’ -> left until ‘CURRENT’ != NULL.
+    . Then pop the top node from the stack and add data from the popped node to answer.
+    . Then do ‘CURRENT’ = popped node -> right and go to step 2
+
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+public class Solution {
+    public static List < Integer > getInOrderTraversal(TreeNode root) {
+
+        // Create answer array to store traversal.
+        List< Integer > answer = new ArrayList< Integer >();
+
+        // Base case.
+        if (root == null) {
+            return answer;
+        }
+
+        // Create an empty stack.
+        Stack st = new Stack();
+
+        // Initialize current node as 'ROOT'.
+        TreeNode current = root;
+
+        // Run a loop until stack is not empty.
+        while (current != null || st.empty() == false) {
+
+            while (current != null) {
+
+                // Push current node to stack.
+                st.push(current);
+
+                // Move to left subtree of 'CURRENT'.
+                current = current.left;
+            }
+
+            // 'CURRENT' must be NULL at this point. So appoint current node to top element of tsack and remove it.
+            current = (TreeNode) st.pop();
+
+            // Add data of popped node to answer.
+            answer.add(current.data);
+
+            // Visit right subtree of current node.
+            current = current.right;
+        }
+
+        // Return answer.
+        return answer;
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Morris Traversal - Inorder Traversal without stack and without recursion
+Time - 
+Space -
+
+Intution -
+
+
+
