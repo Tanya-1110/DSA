@@ -9,13 +9,23 @@ Output: 5 2 3 1 4
 
 No. of Approaches - 3
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Recursive Approach 
-Time - O(N), N is number of nodes in binary tree.
-Space - O(N), O(1) for program execution and O(N) as an auxillary space as a tack is used to store all N elements.
+Recursive Approach -
+
+Time - O(N), N is number of nodes in binary tree and every node is traversed for once.
+Space - O(N), O(1) for program execution and O(N) as an auxillary space as a stack is used to store all N elements if in worst case tree is skewed and in best case
+              if given binary tree is complete then space complexity will be O(logn).
 
 Intution - As we can see, before processing any node, the left subtree is processed first, followed by the node, and the right subtree is processed at last. These 
            operations can be defined recursively for each node. The recursive implementation is referred to as a Depth-first search (DFS), as the search tree is 
            deepened as much as possible on each child before going to the next sibling.
+
+The steps are as follows :
+
+1. We create a recursive function inOrderHelper() which takes the root of the tree as an argument.
+2. inOrderHelper() :
+   . Visit the left subtree of ‘node’ i.e., call inOrderHelper(‘node’ -> left).
+   . Visit ‘node’ and if ‘node’ != NULL then add data of node to answer.
+   . Visit the right subtree of ‘node’ i.e., call inOrderHelper(‘node’ -> right).
 
 
 /*
@@ -67,7 +77,8 @@ public class Solution {
     }
 }
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Iterative Approach - Inorder Traversal using Stack
+Iterative Approach - Inorder Traversal using Stack -
+
 Time - O(N), Every node is visited once.
 Space - O(N), in a sekwed tree all the elements will be stored in the stack. So, space will become O(N) for stack will store all n elements.
 
@@ -114,7 +125,7 @@ public class Solution {
                 current = current.left;
             }
 
-            // 'CURRENT' must be NULL at this point. So appoint current node to top element of tsack and remove it.
+            // 'CURRENT' must be NULL at this point. So appoint current node to top element of stack and remove it.
             current = (TreeNode) st.pop();
 
             // Add data of popped node to answer.
@@ -129,11 +140,81 @@ public class Solution {
     }
 }
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Morris Traversal - Inorder Traversal without stack and without recursion
-Time - 
-Space -
+Morris Traversal - Inorder Traversal without stack and without recursion -
 
-Intution -
+Time - O(N), where ‘N’ is the total number of nodes in the given binary tree. In the worst case, we are visiting each node at most twice in Inorder traversal.
 
+Space - O(1), constants are used.
 
+Intution - When we are currently at a node, the following cases can arise:
 
+Case 1: When the current node has no left subtree. In this scenario, there is nothing to be traversed on the left side, so we simply print the value of the current
+        node and move to the right of the current node.
+Case 2: When there is a left subtree and the right-most child of this left subtree is pointing to null. In this case we need to set the right-most child to point 
+        to the current node, instead of NULL and move to the left of the current node.
+Case 3: When there is a left subtree and the right-most child of this left-subtree is already pointing to the current node. In this case we know that the left 
+        subtree is already visited so we need to print the value of the current node and move to the right of the current node.
+Note: Case 3 is very important as we need to remove the new links added to restore the original tree.
+
+To summarize, at a node whether we have to move left or right is determined whether the node has a left subtree. If it doesn’t we move to the right. If there is a 
+left subtree then we see its rightmost child. If the rightmost child is pointing to NULL, we move the current node to its left. If the rightmost child is already 
+pointing towards the current node, we remove that link and move to the right of the current node. We will stop the execution when the current points to null and we
+have traversed the whole tree.
+
+So Finding a predecessor will take O( N ) as time as we will be visiting every edge at most two times and there are only ‘N’ - 1 edges in a binary tree. Here ‘N’ 
+is the total number of nodes in a binary tree.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+
+        List<Integer>ans=new ArrayList<>();
+        TreeNode curr=root;
+
+        while(curr!=null){
+            if(curr.left==null){
+                ans.add(curr.val);
+                curr=curr.right;
+            }
+            else{
+
+             // Find predecessor of current node.
+                TreeNode prev=curr.left;
+                while(prev.right!=null && prev.right!=curr){
+                    prev=prev.right;
+                }
+
+                if(prev.right==null){
+           //  Make a link between predecessor and current node so that we have a path to come back to current when we have traversed the whole left subtree.
+
+                    prev.right=curr;
+                    curr=curr.left;
+                }
+
+                else{
+          /*  If right node of predecessor is not NULL then it means we have traversed the whole left subtree. So we unlink the connection between current and 
+              predecessor and move to right node of current.
+          */
+                    prev.right=null;
+                    ans.add(curr.val);
+                    curr=curr.right;
+                }
+            }
+        }
+        return ans;
+    }
+}
